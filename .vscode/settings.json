@@ -1,0 +1,12 @@
+{
+	"editor.formatOnSave": true,
+	"[csharp]": {
+		"editor.defaultFormatter": "csharpier.csharpier-vscode"
+	},
+	"xml.fileAssociations": [
+		{
+			"pattern": "tic-tac-toe.csproj",
+			"systemId": "https://raw.githubusercontent.com/dotnet/msbuild/main/src/MSBuild/MSBuild/Microsoft.Build.CommonTypes.xsd"
+		}
+	]
+}
