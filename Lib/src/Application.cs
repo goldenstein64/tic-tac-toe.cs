@@ -13,26 +13,29 @@ public class Application(IConnection connection)
 
 	public IPlayer? ChoosePlayer(Mark mark)
 	{
-		switch (Conn.Prompt(IOMessages.MSG_PromptPlayer, mark))
+		try
 		{
-			case "H":
-				return new Human(Conn);
-			case "C":
-				switch (Conn.Prompt(IOMessages.MSG_PromptComputer, mark))
-				{
-					case "E":
-						return new EasyComputer();
-					case "M":
-						return new MediumComputer();
-					case "H":
-						return new HardComputer();
-					default:
-						Conn.Print(IOMessages.ERR_ComputerInvalid);
-						return null;
-				}
-			default:
-				Conn.Print(IOMessages.ERR_PlayerInvalid);
-				return null;
+			return Conn.Prompt(IOMessages.MSG_PromptPlayer, mark) switch
+			{
+				"H" => new Human(Conn),
+				"C"
+					=> Conn.Prompt(IOMessages.MSG_PromptComputer, mark) switch
+					{
+						"E" => new EasyComputer(),
+						"M" => new MediumComputer(),
+						"H" => new HardComputer(),
+						_
+							=> throw new MessageException(
+								IOMessages.ERR_ComputerInvalid
+							),
+					},
+				_ => throw new MessageException(IOMessages.ERR_PlayerInvalid),
+			};
+		}
+		catch (MessageException e)
+		{
+			Conn.Print(e.IOMessage, e.Arguments);
+			return null;
 		}
 	}
 
