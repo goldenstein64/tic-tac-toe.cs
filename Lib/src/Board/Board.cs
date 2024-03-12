@@ -85,30 +85,28 @@ public class Board : IEnumerable<Mark?>
 		Data[pos] = mark;
 	}
 
+	/// <summary>
+	/// creates a string representation of this board. This one uses ASCII.
+	/// </summary>
 	public override string ToString() =>
-		Data.Chunk(3)
-			.Select(
-				(row, i) =>
-					row.Select( // convert each element to a string
-							(maybeMark, j) =>
-								maybeMark is Mark mark
-									? mark.ToString()
-									: (i * 3 + j + 1).ToString() // default to index + 1
+		string.Concat(
+			Data.Select((mark, i) => (mark, i))
+				.Chunk(3)
+				.Select(
+					(row) =>
+						string.Concat(
+							row.Select( // convert each element to a string
+									(t) =>
+										t.mark is Mark mark
+											? mark.ToString()
+											: t.i.ToString() // default to index + 1
+								)
+								.Intersperse(" | ") // vertical separators
+								.Prepend(" ") // padding on left side
+								.Append(" ") // padding on right side
 						)
-						.Intersperse(" | ") // vertical separators
-						.Prepend(" ") // padding on left side
-						.Append(" ") // padding on right side
-						.Aggregate( // turn it into a string
-							new StringBuilder(),
-							(builder, str) => builder.Append(str)
-						)
-						.ToString()
-			)
-			.Intersperse("-----------") // horizontal separators
-			.Intersperse("\n") // put new lines between each element
-			.Aggregate( // turn it into a string
-				new StringBuilder(),
-				(builder, str) => builder.Append(str)
-			)
-			.ToString();
+				)
+				.Intersperse("-----------") // horizontal separators
+				.Intersperse("\n") // put new lines between each element
+		);
 }
