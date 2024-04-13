@@ -99,7 +99,7 @@ public class Board : IEnumerable<Mark?>
 									(t) =>
 										t.mark is Mark mark
 											? mark.ToString()
-											: t.i.ToString() // default to index + 1
+											: (t.i + 1).ToString() // default to index + 1
 								)
 								.Intersperse(" | ") // vertical separators
 								.Prepend(" ") // padding on left side
