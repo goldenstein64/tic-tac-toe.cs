@@ -72,7 +72,23 @@ public class GetMoveOnce : UsesHuman
 	}
 
 	[Fact]
-	public void PrintsPositionIsNaN()
+	public void PrintsNaN_OnHugeInt()
+	{
+		var board = new Board(",,,,,,,,,");
+		Connection.Inputs = new(["9999999999999999999999999999999"]);
+
+		var move = Subject.GetMoveOnce(board, Mark.X);
+
+		Assert.Equal(
+			[IOMessages.MSG_PromptMove, IOMessages.ERR_NotANumber],
+			Connection.Outputs
+		);
+
+		Assert.Null(move);
+	}
+
+	[Fact]
+	public void PrintsNaN_OnNonInt()
 	{
 		var board = new Board(",,,,,,,,,");
 		Connection.Inputs = new(["@"]);
