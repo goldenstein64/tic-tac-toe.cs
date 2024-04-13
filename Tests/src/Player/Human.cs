@@ -1,29 +1,28 @@
 using TicTacToe.Data;
+using TicTacToe.Messages;
 using TicTacToe.Player;
 using TicTacToe.Tests.Util;
 
 namespace TicTacToe.Tests.Player.HumanTests;
 
-using ConsoleCapture = MockConsole<Human.IOMessages>;
-
 public class UsesHuman
 {
-	public ConsoleCapture ConsoleCapture = new();
+	public MockConsole Connection = new();
 	public Human Subject;
 
 	public UsesHuman()
 	{
-		Subject = new Human() { Conn = ConsoleCapture };
+		Subject = new Human(Connection);
 	}
 
-	public void AssertPrints(Human.IOMessages message)
+	public void AssertPrints(IOMessages message)
 	{
-		Assert.Contains(message, ConsoleCapture.Outputs);
+		Assert.Contains(message, Connection.Outputs);
 	}
 
-	public void AssertDoesNotPrint(Human.IOMessages message)
+	public void AssertDoesNotPrint(IOMessages message)
 	{
-		Assert.DoesNotContain(message, ConsoleCapture.Outputs);
+		Assert.DoesNotContain(message, Connection.Outputs);
 	}
 }
 
@@ -33,13 +32,13 @@ public class GetMove : UsesHuman
 	public void AsksIOForMove()
 	{
 		var board = new Board(",,,,,,,,,");
-		ConsoleCapture.Inputs = new(["2"]);
+		Connection.Inputs = new(["2"]);
 
 		var move = Subject.GetMove(board, Mark.X);
-		AssertPrints(Human.IOMessages.MSG_PromptMove);
-		AssertDoesNotPrint(Human.IOMessages.ERR_NotANumber);
-		AssertDoesNotPrint(Human.IOMessages.ERR_NumberOutOfRange);
-		AssertDoesNotPrint(Human.IOMessages.ERR_SpaceOccupied);
+		AssertPrints(IOMessages.MSG_PromptMove);
+		AssertDoesNotPrint(IOMessages.ERR_NotANumber);
+		AssertDoesNotPrint(IOMessages.ERR_NumberOutOfRange);
+		AssertDoesNotPrint(IOMessages.ERR_SpaceOccupied);
 		Assert.Equal(1, move);
 	}
 
@@ -47,14 +46,14 @@ public class GetMove : UsesHuman
 	public void PositionIsOccupied_Prints()
 	{
 		var board = new Board(",XO,,,,,,");
-		ConsoleCapture.Inputs = new(["3", "2", "1"]);
+		Connection.Inputs = new(["3", "2", "1"]);
 
 		var move = Subject.GetMove(board, Mark.X);
 
-		AssertPrints(Human.IOMessages.MSG_PromptMove);
-		AssertDoesNotPrint(Human.IOMessages.ERR_NotANumber);
-		AssertDoesNotPrint(Human.IOMessages.ERR_NumberOutOfRange);
-		AssertPrints(Human.IOMessages.ERR_SpaceOccupied);
+		AssertPrints(IOMessages.MSG_PromptMove);
+		AssertDoesNotPrint(IOMessages.ERR_NotANumber);
+		AssertDoesNotPrint(IOMessages.ERR_NumberOutOfRange);
+		AssertPrints(IOMessages.ERR_SpaceOccupied);
 
 		Assert.Equal(0, move);
 	}
@@ -63,14 +62,14 @@ public class GetMove : UsesHuman
 	public void PositionOutOfRange_Prints()
 	{
 		var board = new Board(",,,,,,,,,");
-		ConsoleCapture.Inputs = new(["0", "1"]);
+		Connection.Inputs = new(["0", "1"]);
 
 		var move = Subject.GetMove(board, Mark.X);
 
-		AssertPrints(Human.IOMessages.MSG_PromptMove);
-		AssertDoesNotPrint(Human.IOMessages.ERR_NotANumber);
-		AssertPrints(Human.IOMessages.ERR_NumberOutOfRange);
-		AssertDoesNotPrint(Human.IOMessages.ERR_SpaceOccupied);
+		AssertPrints(IOMessages.MSG_PromptMove);
+		AssertDoesNotPrint(IOMessages.ERR_NotANumber);
+		AssertPrints(IOMessages.ERR_NumberOutOfRange);
+		AssertDoesNotPrint(IOMessages.ERR_SpaceOccupied);
 
 		Assert.Equal(0, move);
 	}
@@ -79,14 +78,14 @@ public class GetMove : UsesHuman
 	public void PositionIsNaN_Prints()
 	{
 		var board = new Board(",,,,,,,,,");
-		ConsoleCapture.Inputs = new(["@", "1"]);
+		Connection.Inputs = new(["@", "1"]);
 
 		var move = Subject.GetMove(board, Mark.X);
 
-		AssertPrints(Human.IOMessages.MSG_PromptMove);
-		AssertPrints(Human.IOMessages.ERR_NotANumber);
-		AssertDoesNotPrint(Human.IOMessages.ERR_NumberOutOfRange);
-		AssertDoesNotPrint(Human.IOMessages.ERR_SpaceOccupied);
+		AssertPrints(IOMessages.MSG_PromptMove);
+		AssertPrints(IOMessages.ERR_NotANumber);
+		AssertDoesNotPrint(IOMessages.ERR_NumberOutOfRange);
+		AssertDoesNotPrint(IOMessages.ERR_SpaceOccupied);
 
 		Assert.Equal(0, move);
 	}
