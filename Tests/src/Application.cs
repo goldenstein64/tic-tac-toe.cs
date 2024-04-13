@@ -39,10 +39,10 @@ public class ChoosePlayerOnce : UsesApplication
 		Connection.Inputs = new(["C", "H"]);
 		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertPrints(IOMessages.MSG_PromptComputer);
-		AssertDoesNotPrint(IOMessages.ERR_PlayerInvalid);
-		AssertDoesNotPrint(IOMessages.ERR_ComputerInvalid);
+		Assert.Equal(
+			[IOMessages.MSG_PromptPlayer, IOMessages.MSG_PromptComputer],
+			Connection.Outputs
+		);
 		Assert.IsType<HardComputer>(chosenPlayer);
 	}
 
