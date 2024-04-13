@@ -11,48 +11,40 @@ public class Application(IConnection connection)
 {
 	public IConnection Conn = connection;
 
-	public IPlayer? ChoosePlayer(Mark mark)
+	IPlayer? RespondNull(IOMessages message, params object[] args)
 	{
-		try
-		{
-			return Conn.Prompt(IOMessages.MSG_PromptPlayer, mark) switch
-			{
-				"H" => new Human(Conn),
-				"C"
-					=> Conn.Prompt(IOMessages.MSG_PromptComputer, mark) switch
-					{
-						"E" => new EasyComputer(),
-						"M" => new MediumComputer(),
-						"H" => new HardComputer(),
-						_
-							=> throw new MessageException(
-								IOMessages.ERR_ComputerInvalid
-							),
-					},
-				_ => throw new MessageException(IOMessages.ERR_PlayerInvalid),
-			};
-		}
-		catch (MessageException e)
-		{
-			Conn.Print(e.IOMessage, e.Arguments);
-			return null;
-		}
+		Conn.Print(message, args);
+		return null;
 	}
 
-	public IPlayer[] ChoosePlayers()
-	{
-		var currentMark = Mark.X;
-		var result = new IPlayer[2];
-		for (var i = 0; i < result.Length; i++)
+	public IPlayer? ChooseComputerOnce(Mark mark) =>
+		Conn.Prompt(IOMessages.MSG_PromptComputer, mark) switch
 		{
-			IPlayer? chosen = ChoosePlayer(currentMark);
-			while (chosen is null)
-				chosen = ChoosePlayer(currentMark);
-			result[i] = chosen;
-			currentMark = currentMark.Other();
-		}
-		return result;
+			"E" => new EasyComputer(),
+			"M" => new MediumComputer(),
+			"H" => new HardComputer(),
+			_ => RespondNull(IOMessages.ERR_ComputerInvalid),
+		};
+
+	public IPlayer? ChoosePlayerOnce(Mark mark) =>
+		Conn.Prompt(IOMessages.MSG_PromptPlayer, mark) switch
+		{
+			"H" => new Human(Conn),
+			"C" => ChooseComputerOnce(mark),
+			_ => RespondNull(IOMessages.ERR_PlayerInvalid),
+		};
+
+	public IPlayer ChoosePlayer(Mark mark)
+	{
+		IPlayer? player = null;
+		while (player is null)
+			player = ChoosePlayerOnce(mark);
+
+		return player;
 	}
+
+	public IPlayer[] ChoosePlayers() =>
+		[ChoosePlayer(Mark.X), ChoosePlayer(Mark.O)];
 
 	public Mark? PlayGame(Board board, IPlayer[] players)
 	{

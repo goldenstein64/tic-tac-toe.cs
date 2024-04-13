@@ -7,46 +7,32 @@ public class Human(IConnection connection) : IPlayer
 {
 	public IConnection Conn = connection;
 
-	class MessageException(IOMessages message, params object[] args) : Exception
+	int? GetMoveOnce(Board board, Mark mark)
 	{
-		public new readonly IOMessages Message = message;
-		public readonly object[] Arguments = args;
-	}
-
-	int GetMoveOnce(Board board, Mark mark)
-	{
-		var response = Conn.Prompt(IOMessages.MSG_PromptMove, mark);
-
-		int responseInt;
-		try
+		var result = Conn.PromptInt(IOMessages.MSG_PromptMove, mark);
+		if (result is < 1 or > 9)
 		{
-			responseInt = int.Parse(response);
-		}
-		catch (Exception e) when (e is FormatException or OverflowException)
-		{
-			throw new MessageException(IOMessages.ERR_NotANumber);
+			Conn.Print(IOMessages.ERR_NumberOutOfRange);
+			return null;
 		}
 
-		if (responseInt is < 1 or > 9)
-			throw new MessageException(IOMessages.ERR_NumberOutOfRange);
+		result -= 1;
 
-		responseInt -= 1;
-		if (!board.CanMark(responseInt))
-			throw new MessageException(IOMessages.ERR_SpaceOccupied);
+		if (!board.CanMark(result))
+		{
+			Conn.Print(IOMessages.ERR_SpaceOccupied);
+			return null;
+		}
 
-		return responseInt;
+		return result;
 	}
 
 	public int GetMove(Board board, Mark mark)
 	{
-		while (true)
-			try
-			{
-				return GetMoveOnce(board, mark);
-			}
-			catch (MessageException e)
-			{
-				Conn.Print(e.Message, e.Arguments);
-			}
+		int? move = null;
+		while (move is null)
+			move = GetMoveOnce(board, mark);
+
+		return (int)move;
 	}
 }
