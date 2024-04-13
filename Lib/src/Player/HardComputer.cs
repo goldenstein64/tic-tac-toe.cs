@@ -147,7 +147,6 @@ public class HardComputer : IPlayer
 	{
 		var otherMark = mark.Other();
 
-		var reconcile = Reconcilers(mark);
 		var actions = SimpleActions(board);
 		var scores = actions
 			.Select((action) => ResultOf(board, mark, action))
