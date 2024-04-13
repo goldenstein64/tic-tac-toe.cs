@@ -17,7 +17,7 @@ public class Application(IConnection connection)
 		return null;
 	}
 
-	public IPlayer? ChooseComputerOnce(Mark mark) =>
+	IPlayer? ChooseComputerOnce(Mark mark) =>
 		Conn.Prompt(IOMessages.MSG_PromptComputer, mark) switch
 		{
 			"E" => new EasyComputer(),
