@@ -9,7 +9,14 @@ public class Human(IConnection connection) : IPlayer
 
 	int? GetMoveOnce(Board board, Mark mark)
 	{
-		var result = Conn.PromptInt(IOMessages.MSG_PromptMove, mark);
+		var @in = Conn.PromptInt(IOMessages.MSG_PromptMove, mark);
+		if (@in is null)
+		{
+			Conn.Print(IOMessages.ERR_NotANumber);
+			return null;
+		}
+
+		var result = (int)@in;
 		if (result is < 1 or > 9)
 		{
 			Conn.Print(IOMessages.ERR_NumberOutOfRange);
