@@ -15,12 +15,17 @@ public class UsesApplication
 		Subject = new Application(Connection);
 	}
 
-	public void AssertPrints(IOMessages message)
+	public void AssertPrints(IOMessages message, int count)
 	{
-		Assert.Contains(message, Connection.Outputs);
+		for (var i = 0; i < count; i++)
+		{
+			Assert.True(Connection.Outputs.Remove(message));
+		}
 	}
 
-	public void AssertNotPrint(IOMessages message)
+	public void AssertPrints(IOMessages message) => AssertPrints(message, 1);
+
+	public void AssertDoesNotPrint(IOMessages message)
 	{
 		Assert.DoesNotContain(message, Connection.Outputs);
 	}
@@ -36,8 +41,8 @@ public class ChoosePlayerOnce : UsesApplication
 
 		AssertPrints(IOMessages.MSG_PromptPlayer);
 		AssertPrints(IOMessages.MSG_PromptComputer);
-		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
-		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
+		AssertDoesNotPrint(IOMessages.ERR_PlayerInvalid);
+		AssertDoesNotPrint(IOMessages.ERR_ComputerInvalid);
 		Assert.IsType<HardComputer>(chosenPlayer);
 	}
 
@@ -47,10 +52,10 @@ public class ChoosePlayerOnce : UsesApplication
 		Connection.Inputs = new(["C", "M"]);
 		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertPrints(IOMessages.MSG_PromptComputer);
-		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
-		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
+		Assert.Equal(
+			[IOMessages.MSG_PromptPlayer, IOMessages.MSG_PromptComputer],
+			Connection.Outputs
+		);
 		Assert.IsType<MediumComputer>(chosenPlayer);
 	}
 
@@ -60,10 +65,10 @@ public class ChoosePlayerOnce : UsesApplication
 		Connection.Inputs = new(["C", "E"]);
 		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertPrints(IOMessages.MSG_PromptComputer);
-		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
-		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
+		Assert.Equal(
+			[IOMessages.MSG_PromptPlayer, IOMessages.MSG_PromptComputer],
+			Connection.Outputs
+		);
 		Assert.IsType<EasyComputer>(chosenPlayer);
 	}
 
@@ -73,10 +78,7 @@ public class ChoosePlayerOnce : UsesApplication
 		Connection.Inputs = new(["H"]);
 		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertNotPrint(IOMessages.MSG_PromptComputer);
-		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
-		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
+		Assert.Equal([IOMessages.MSG_PromptPlayer], Connection.Outputs);
 		Assert.IsType<Human>(chosenPlayer);
 	}
 
@@ -86,10 +88,14 @@ public class ChoosePlayerOnce : UsesApplication
 		Connection.Inputs = new(["C", "@"]);
 		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
-		AssertPrints(IOMessages.MSG_PromptComputer);
-		AssertPrints(IOMessages.ERR_ComputerInvalid);
+		Assert.Equal(
+			[
+				IOMessages.MSG_PromptPlayer,
+				IOMessages.MSG_PromptComputer,
+				IOMessages.ERR_ComputerInvalid
+			],
+			Connection.Outputs
+		);
 		Assert.Null(chosenPlayer);
 	}
 
@@ -99,11 +105,49 @@ public class ChoosePlayerOnce : UsesApplication
 		Connection.Inputs = new(["#"]);
 		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertPrints(IOMessages.ERR_PlayerInvalid);
-		AssertNotPrint(IOMessages.MSG_PromptComputer);
-		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
+		Assert.Equal(
+			[IOMessages.MSG_PromptPlayer, IOMessages.ERR_PlayerInvalid],
+			Connection.Outputs
+		);
 		Assert.Null(chosenPlayer);
+	}
+}
+
+public class ChoosePlayer : UsesApplication
+{
+	[Fact]
+	public void RetriesOnInvalidPlayer()
+	{
+		Connection.Inputs = new(["#", "H"]);
+		var chosenPlayer = Subject.ChoosePlayer(Mark.X);
+
+		Assert.Equal(
+			[
+				IOMessages.MSG_PromptPlayer,
+				IOMessages.ERR_PlayerInvalid,
+				IOMessages.MSG_PromptPlayer
+			],
+			Connection.Outputs
+		);
+		Assert.IsType<Human>(chosenPlayer);
+	}
+
+	[Fact]
+	public void RetriesOnInvalidComputer()
+	{
+		Connection.Inputs = new(["C", "@", "H"]);
+		var chosenPlayer = Subject.ChoosePlayer(Mark.X);
+
+		Assert.Equal(
+			[
+				IOMessages.MSG_PromptPlayer,
+				IOMessages.MSG_PromptComputer,
+				IOMessages.ERR_ComputerInvalid,
+				IOMessages.MSG_PromptPlayer
+			],
+			Connection.Outputs
+		);
+		Assert.IsType<Human>(chosenPlayer);
 	}
 }
 
@@ -116,8 +160,20 @@ public class ChoosePlayers : UsesApplication
 
 		var players = Subject.ChoosePlayers();
 
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertPrints(IOMessages.ERR_PlayerInvalid);
+		Assert.Equal(
+			[
+				IOMessages.MSG_PromptPlayer,
+				IOMessages.ERR_PlayerInvalid,
+				IOMessages.MSG_PromptPlayer,
+				IOMessages.MSG_PromptComputer,
+				IOMessages.MSG_PromptPlayer,
+				IOMessages.ERR_PlayerInvalid,
+				IOMessages.MSG_PromptPlayer,
+				IOMessages.ERR_PlayerInvalid,
+				IOMessages.MSG_PromptPlayer,
+			],
+			Connection.Outputs
+		);
 
 		Assert.Equal(2, players.Length);
 		Assert.IsType<HardComputer>(players[0]);
@@ -131,10 +187,23 @@ public class ChoosePlayers : UsesApplication
 
 		var players = Subject.ChoosePlayers();
 
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertPrints(IOMessages.MSG_PromptComputer);
-		AssertPrints(IOMessages.ERR_PlayerInvalid);
-		AssertPrints(IOMessages.ERR_ComputerInvalid);
+		Assert.Equal(
+			[
+				IOMessages.MSG_PromptPlayer, // "C"
+				IOMessages.MSG_PromptComputer, // "@"
+				IOMessages.ERR_ComputerInvalid,
+				IOMessages.MSG_PromptPlayer, // "C"
+				IOMessages.MSG_PromptComputer, // "M"
+				IOMessages.MSG_PromptPlayer, // "@"
+				IOMessages.ERR_PlayerInvalid,
+				IOMessages.MSG_PromptPlayer, // "C"
+				IOMessages.MSG_PromptComputer, // "@"
+				IOMessages.ERR_ComputerInvalid,
+				IOMessages.MSG_PromptPlayer, // "C"
+				IOMessages.MSG_PromptComputer, // "E"
+			],
+			Connection.Outputs
+		);
 
 		Assert.Equal(2, players.Length);
 		Assert.IsType<MediumComputer>(players[0]);
@@ -149,7 +218,7 @@ public class DisplayWinner : UsesApplication
 	{
 		Subject.DisplayWinner(null);
 
-		AssertPrints(IOMessages.MSG_Tied);
+		Assert.Equal([IOMessages.MSG_Tied], Connection.Outputs);
 	}
 
 	[Fact]
@@ -157,7 +226,7 @@ public class DisplayWinner : UsesApplication
 	{
 		Subject.DisplayWinner(Mark.X);
 
-		AssertPrints(IOMessages.MSG_PlayerWon);
+		Assert.Equal([IOMessages.MSG_PlayerWon], Connection.Outputs);
 	}
 
 	[Fact]
@@ -165,7 +234,7 @@ public class DisplayWinner : UsesApplication
 	{
 		Subject.DisplayWinner(Mark.O);
 
-		AssertPrints(IOMessages.MSG_PlayerWon);
+		Assert.Equal([IOMessages.MSG_PlayerWon], Connection.Outputs);
 	}
 }
 
@@ -183,8 +252,27 @@ public class PlayGame : UsesApplication
 		var winner = Subject.PlayGame(board, [human1, human2]);
 
 		Assert.Equal(Mark.X, winner);
-		AssertPrints(IOMessages.MSG_PromptMove);
-		AssertPrints(IOMessages.MSG_Board);
+
+		Assert.Equal(
+			[
+				IOMessages.MSG_Board,
+				IOMessages.MSG_PromptMove, // "1"
+				IOMessages.MSG_Board,
+				IOMessages.MSG_PromptMove, // "2"
+				IOMessages.MSG_Board,
+				IOMessages.MSG_PromptMove, // "7"
+				IOMessages.MSG_Board,
+				IOMessages.MSG_PromptMove, // "4"
+				IOMessages.MSG_Board,
+				IOMessages.MSG_PromptMove, // "9"
+				IOMessages.MSG_Board,
+				IOMessages.MSG_PromptMove, // "5"
+				IOMessages.MSG_Board,
+				IOMessages.MSG_PromptMove, // "8"
+				IOMessages.MSG_Board,
+			],
+			Connection.Outputs
+		);
 	}
 
 	[Fact]
