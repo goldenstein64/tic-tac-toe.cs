@@ -1,6 +1,6 @@
 using TicTacToe.Data;
-using TicTacToe.Messages.EnumerableExtensions;
 using TicTacToe.Player;
+using TicTacToe.Util.EnumerableExtensions;
 
 namespace TicTacToe.Tests.Player.HardComputerTests;
 
@@ -71,46 +71,36 @@ public class ResultOf
 		var currentTrials = 0;
 		while (currentTrials < trials)
 		{
-			var initialValues = Enumerable
-				.Range(0, Board.Size)
-				.Select<int, Mark?>(
-					(_) =>
-						RNG.Next(3) switch
-						{
-							0 => Mark.X,
-							1 => Mark.O,
-							_ => null,
-						}
-				);
+			var initialValues = RNG.GetItems<Mark?>(
+				[Mark.X, Mark.O, null],
+				Board.Size
+			);
 
-			var emptyValues = initialValues.IndexesWhere((m) => m is null);
-			if (!emptyValues.Any())
+			var emptyValues = initialValues.IndexesWhere((m) => m is null).ToArray();
+			if (emptyValues.Length == 0)
 				continue;
 
-			var emptyValuesArray = emptyValues.ToArray();
-			Assert.InRange(emptyValuesArray.Length, 1, 9);
-			var chosenIndex = emptyValuesArray[
-				RNG.Next(emptyValuesArray.Length)
-			];
+			Assert.InRange(emptyValues.Length, 1, Board.Size);
+			var chosenIndex = emptyValues[RNG.Next(emptyValues.Length)];
 
-			var initialValuesArray = initialValues.ToArray();
+			Mark?[] expectedValues = [.. initialValues]; // cloning the array
 			var chosenMark = RNG.Next(2) == 0 ? Mark.X : Mark.O;
-			initialValuesArray[chosenIndex] = chosenMark;
+			expectedValues[chosenIndex] = chosenMark;
 
 			var initial = new Board(initialValues);
-			var expected = new Board(initialValuesArray);
+			var expected = new Board(expectedValues);
 
-			yield return [initial, chosenIndex, chosenMark, expected];
+			yield return [initial, chosenMark, chosenIndex, expected];
 			currentTrials++;
 		}
 	}
 
 	[Theory]
 	[MemberData(nameof(GenerateData), 50)]
-	public void GetsCalculatedCorrectly(
+	public void IsCalculatedCorrectly(
 		Board initial,
-		int chosenIndex,
 		Mark chosenMark,
+		int chosenIndex,
 		Board expected
 	)
 	{
