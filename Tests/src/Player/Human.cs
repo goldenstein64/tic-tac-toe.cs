@@ -26,7 +26,7 @@ public class UsesHuman
 	}
 }
 
-public class GetMove : UsesHuman
+public class GetMoveOnce : UsesHuman
 {
 	[Fact]
 	public void AsksIOForMove()
@@ -34,59 +34,56 @@ public class GetMove : UsesHuman
 		var board = new Board(",,,,,,,,,");
 		Connection.Inputs = new(["2"]);
 
-		var move = Subject.GetMove(board, Mark.X);
-		AssertPrints(IOMessages.MSG_PromptMove);
-		AssertDoesNotPrint(IOMessages.ERR_NotANumber);
-		AssertDoesNotPrint(IOMessages.ERR_NumberOutOfRange);
-		AssertDoesNotPrint(IOMessages.ERR_SpaceOccupied);
+		var move = Subject.GetMoveOnce(board, Mark.X);
+		Assert.Equal([IOMessages.MSG_PromptMove], Connection.Outputs);
 		Assert.Equal(1, move);
 	}
 
 	[Fact]
-	public void PositionIsOccupied_Prints()
+	public void PrintsPositionIsOccupied()
 	{
 		var board = new Board(",XO,,,,,,");
-		Connection.Inputs = new(["3", "2", "1"]);
+		Connection.Inputs = new(["3"]);
 
-		var move = Subject.GetMove(board, Mark.X);
+		var move = Subject.GetMoveOnce(board, Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptMove);
-		AssertDoesNotPrint(IOMessages.ERR_NotANumber);
-		AssertDoesNotPrint(IOMessages.ERR_NumberOutOfRange);
-		AssertPrints(IOMessages.ERR_SpaceOccupied);
+		Assert.Equal(
+			[IOMessages.MSG_PromptMove, IOMessages.ERR_SpaceOccupied],
+			Connection.Outputs
+		);
 
-		Assert.Equal(0, move);
+		Assert.Null(move);
 	}
 
 	[Fact]
-	public void PositionOutOfRange_Prints()
+	public void PrintsPositionOutOfRange()
 	{
 		var board = new Board(",,,,,,,,,");
-		Connection.Inputs = new(["0", "1"]);
+		Connection.Inputs = new(["0"]);
 
-		var move = Subject.GetMove(board, Mark.X);
+		var move = Subject.GetMoveOnce(board, Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptMove);
-		AssertDoesNotPrint(IOMessages.ERR_NotANumber);
-		AssertPrints(IOMessages.ERR_NumberOutOfRange);
-		AssertDoesNotPrint(IOMessages.ERR_SpaceOccupied);
+		Assert.Equal(
+			[IOMessages.MSG_PromptMove, IOMessages.ERR_NumberOutOfRange],
+			Connection.Outputs
+		);
 
-		Assert.Equal(0, move);
+		Assert.Null(move);
 	}
 
 	[Fact]
-	public void PositionIsNaN_Prints()
+	public void PrintsPositionIsNaN()
 	{
 		var board = new Board(",,,,,,,,,");
-		Connection.Inputs = new(["@", "1"]);
+		Connection.Inputs = new(["@"]);
 
-		var move = Subject.GetMove(board, Mark.X);
+		var move = Subject.GetMoveOnce(board, Mark.X);
 
-		AssertPrints(IOMessages.MSG_PromptMove);
-		AssertPrints(IOMessages.ERR_NotANumber);
-		AssertDoesNotPrint(IOMessages.ERR_NumberOutOfRange);
-		AssertDoesNotPrint(IOMessages.ERR_SpaceOccupied);
+		Assert.Equal(
+			[IOMessages.MSG_PromptMove, IOMessages.ERR_NotANumber],
+			Connection.Outputs
+		);
 
-		Assert.Equal(0, move);
+		Assert.Null(move);
 	}
 }

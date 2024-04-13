@@ -7,7 +7,7 @@ public class Human(IConnection connection) : IPlayer
 {
 	public IConnection Conn = connection;
 
-	int? GetMoveOnce(Board board, Mark mark)
+	public int? GetMoveOnce(Board board, Mark mark)
 	{
 		var @in = Conn.PromptInt(IOMessages.MSG_PromptMove, mark);
 		if (@in is null)
