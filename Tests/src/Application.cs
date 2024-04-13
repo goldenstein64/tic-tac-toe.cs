@@ -19,18 +19,25 @@ public class UsesApplication
 	{
 		Assert.Contains(message, Connection.Outputs);
 	}
+
+	public void AssertNotPrint(IOMessages message)
+	{
+		Assert.DoesNotContain(message, Connection.Outputs);
+	}
 }
 
-public class ChoosePlayer : UsesApplication
+public class ChoosePlayerOnce : UsesApplication
 {
 	[Fact]
 	public void ReturnsComputerOnCH()
 	{
 		Connection.Inputs = new(["C", "H"]);
-		var chosenPlayer = Subject.ChoosePlayer(Mark.X);
+		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
 		AssertPrints(IOMessages.MSG_PromptPlayer);
 		AssertPrints(IOMessages.MSG_PromptComputer);
+		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
+		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
 		Assert.IsType<HardComputer>(chosenPlayer);
 	}
 
@@ -38,10 +45,12 @@ public class ChoosePlayer : UsesApplication
 	public void ReturnsComputerOnCM()
 	{
 		Connection.Inputs = new(["C", "M"]);
-		var chosenPlayer = Subject.ChoosePlayer(Mark.X);
+		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
 		AssertPrints(IOMessages.MSG_PromptPlayer);
 		AssertPrints(IOMessages.MSG_PromptComputer);
+		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
+		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
 		Assert.IsType<MediumComputer>(chosenPlayer);
 	}
 
@@ -49,44 +58,52 @@ public class ChoosePlayer : UsesApplication
 	public void ReturnsComputerOnCE()
 	{
 		Connection.Inputs = new(["C", "E"]);
-		var chosenPlayer = Subject.ChoosePlayer(Mark.X);
+		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
 		AssertPrints(IOMessages.MSG_PromptPlayer);
 		AssertPrints(IOMessages.MSG_PromptComputer);
+		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
+		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
 		Assert.IsType<EasyComputer>(chosenPlayer);
-	}
-
-	[Fact]
-	public void DetectsInvalidComputer()
-	{
-		Connection.Inputs = new(["C", "@", "H"]);
-		var chosenPlayer = Subject.ChoosePlayer(Mark.X);
-
-		AssertPrints(IOMessages.MSG_PromptPlayer);
-		AssertPrints(IOMessages.MSG_PromptComputer);
-		AssertPrints(IOMessages.ERR_ComputerInvalid);
-		Assert.IsType<Human>(chosenPlayer);
 	}
 
 	[Fact]
 	public void ReturnsHumanOnH()
 	{
 		Connection.Inputs = new(["H"]);
-		var chosenPlayer = Subject.ChoosePlayer(Mark.X);
+		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
 		AssertPrints(IOMessages.MSG_PromptPlayer);
+		AssertNotPrint(IOMessages.MSG_PromptComputer);
+		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
+		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
 		Assert.IsType<Human>(chosenPlayer);
 	}
 
 	[Fact]
-	public void DetectsInvalid()
+	public void ReturnsNullOnInvalidComputer()
 	{
-		Connection.Inputs = new(["@", "H"]);
-		var chosenPlayer = Subject.ChoosePlayer(Mark.X);
+		Connection.Inputs = new(["C", "@"]);
+		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
+
+		AssertPrints(IOMessages.MSG_PromptPlayer);
+		AssertNotPrint(IOMessages.ERR_PlayerInvalid);
+		AssertPrints(IOMessages.MSG_PromptComputer);
+		AssertPrints(IOMessages.ERR_ComputerInvalid);
+		Assert.Null(chosenPlayer);
+	}
+
+	[Fact]
+	public void ReturnsNullOnInvalidPlayer()
+	{
+		Connection.Inputs = new(["#"]);
+		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
 		AssertPrints(IOMessages.MSG_PromptPlayer);
 		AssertPrints(IOMessages.ERR_PlayerInvalid);
-		Assert.IsType<Human>(chosenPlayer);
+		AssertNotPrint(IOMessages.MSG_PromptComputer);
+		AssertNotPrint(IOMessages.ERR_ComputerInvalid);
+		Assert.Null(chosenPlayer);
 	}
 }
 
