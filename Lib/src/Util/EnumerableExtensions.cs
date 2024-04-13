@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace TicTacToe.Util.EnumerableExtensions;
 
 public static class Enumerables
@@ -17,7 +19,6 @@ public static class Enumerables
 	{
 		using var enumerator = values.GetEnumerator();
 
-		enumerator.Reset();
 		if (enumerator.MoveNext())
 			yield return enumerator.Current;
 		else
