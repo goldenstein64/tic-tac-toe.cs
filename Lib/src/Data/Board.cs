@@ -9,10 +9,9 @@ public class Board : IEnumerable<Mark?>
 
 	readonly Mark?[] Data = new Mark?[Size];
 
-	public Board() { }
+	public Board() => Data = Enumerable.Repeat<Mark?>(null, Size).ToArray();
 
-	public Board(string pattern)
-	{
+	public Board(string pattern) =>
 		Data = pattern
 			.Take(Size)
 			.Select<char, Mark?>(
@@ -25,7 +24,6 @@ public class Board : IEnumerable<Mark?>
 					}
 			)
 			.ToArray();
-	}
 
 	public Board(IEnumerable<Mark?> data)
 	{
@@ -69,9 +67,10 @@ public class Board : IEnumerable<Mark?>
 
 	public bool Full() => Data.All((mark) => mark is not null);
 
-	public bool Empty() => Data.Any();
+	public bool Empty() => Data.All((mark) => mark is null);
 
-	public bool IsMarkedWith(int pos, Mark? mark) => Data[pos] == mark;
+	public bool IsMarkedWith(int pos, Mark? mark) =>
+		pos is >= 0 and < Size && Data[pos] == mark;
 
 	public bool CanMark(int pos) => IsMarkedWith(pos, null);
 
@@ -97,9 +96,7 @@ public class Board : IEnumerable<Mark?>
 						string.Concat(
 							row.Select( // convert each element to a string
 									(t) =>
-										t.mark is Mark mark
-											? mark.ToString()
-											: (t.i + 1).ToString() // default to index + 1
+										t.mark is Mark mark ? mark.ToString() : (t.i + 1).ToString() // default to index + 1
 								)
 								.Intersperse(" | ") // vertical separators
 								.Prepend(" ") // padding on left side
