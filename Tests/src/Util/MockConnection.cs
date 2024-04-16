@@ -2,7 +2,7 @@ using TicTacToe.Messages;
 
 namespace TicTacToe.Tests.Util;
 
-public class MockConsole : IConnection
+public class MockConnection : IConnection
 {
 	public List<IOMessages> Outputs = [];
 	public Queue<string> Inputs = [];

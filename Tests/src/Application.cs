@@ -7,7 +7,7 @@ namespace TicTacToe.Tests.ApplicationTests;
 
 public class UsesApplication
 {
-	public MockConsole Connection = new();
+	public MockConnection Connection = new();
 	public Application Subject;
 
 	public UsesApplication()

@@ -7,7 +7,7 @@ namespace TicTacToe.Tests.Player.HumanTests;
 
 public class UsesHuman
 {
-	public MockConsole Connection = new();
+	public MockConnection Connection = new();
 	public Human Subject;
 
 	public UsesHuman()
