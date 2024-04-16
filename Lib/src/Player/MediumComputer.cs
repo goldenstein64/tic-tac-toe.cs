@@ -65,41 +65,32 @@ public class MediumComputer : IPlayer
 			if (board[i] != null)
 				continue;
 
-			foreach (var patternIndexes in WinPatternMap)
+			var trapCount = 0;
+			foreach (var patternIndex in WinPatternMap[i])
 			{
-				var patterns = patternIndexes.Select(
-					(j) => Board.WinPatterns[j]
-				);
+				var pattern = Board.WinPatterns[patternIndex];
 
-				var trapCount = 0;
-				foreach (var pattern in patterns)
+				var hasEmpty = false;
+				var hasMark = false;
+				foreach (var j in pattern.Where((j) => j != i))
 				{
-					var hasEmpty = false;
-					var hasMark = false;
-
-					foreach (var j in pattern)
-					{
-						if (j == i)
-							continue;
-
-						var found = board[j];
-						if (found == mark)
-							hasMark = true;
-						else if (found is null)
-							hasEmpty = true;
-						else
-							goto NextWinPattern;
-					}
-
-					if (hasEmpty && hasMark)
-						trapCount += 1;
-
-					NextWinPattern: { }
+					var found = board[j];
+					if (found == mark)
+						hasMark = true;
+					else if (found is null)
+						hasEmpty = true;
+					else
+						goto NextWinPattern;
 				}
 
-				if (trapCount > 1)
-					result.Add(i);
+				if (hasEmpty && hasMark)
+					trapCount += 1;
+
+				NextWinPattern: { }
 			}
+
+			if (trapCount > 1)
+				result.Add(i);
 		}
 
 		return result.Count > 0 ? result : null;
@@ -129,7 +120,7 @@ public class MediumComputer : IPlayer
 			?? GetCenterMove(board, mark)
 			?? GetCornerMoves(board, mark)
 			?? GetSideMoves(board, mark)
-			?? throw new("No moves to make!");
+			?? throw new("no moves to take!");
 
 		return moves[MoveRNG.Next(moves.Count)];
 	}

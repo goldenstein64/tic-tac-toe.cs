@@ -23,10 +23,7 @@ public class HardComputer : IPlayer
 		(1, 5),
 	];
 
-	readonly struct Symmetry(
-		IEnumerable<int> equalities,
-		IEnumerable<int> image
-	)
+	readonly struct Symmetry(IEnumerable<int> equalities, IEnumerable<int> image)
 	{
 		public readonly IEnumerable<int> Equalities = equalities;
 		public readonly IEnumerable<int> Image = image;
@@ -152,7 +149,8 @@ public class HardComputer : IPlayer
 			.Select((action) => ResultOf(board, mark, action))
 			.Select((newBoard) => Judge(newBoard, otherMark));
 
-		var bestScore = Math.Max(Controls(mark), scores.Max());
+		var reconcile = Reconcilers(mark);
+		var bestScore = scores.Aggregate(Controls(mark), reconcile);
 		var bestMoves = actions
 			.Zip(scores)
 			.Cast<(int action, int score)>()
@@ -172,7 +170,7 @@ public class HardComputer : IPlayer
 		else
 		{
 			var moves = GetMoves(board, mark);
-			if (moves.Count >= 0)
+			if (moves.Count <= 0)
 				throw new("no moves to take!");
 			return moves[MoveRNG.Next(moves.Count)];
 		}
