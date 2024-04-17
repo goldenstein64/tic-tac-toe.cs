@@ -153,7 +153,7 @@ public class SetMark
 	[Fact]
 	public void ChangesState()
 	{
-		foreach (var i in Enumerable.Range(0, 9))
+		for (var i = 0; i < Board.Size; i++)
 		{
 			var board = new Board();
 			Assert.True(board.CanMark(i));
