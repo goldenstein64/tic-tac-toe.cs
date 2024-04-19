@@ -76,12 +76,12 @@ public class ResultOf
 				Board.Size
 			);
 
-			var emptyValues = initialValues.IndexesWhere((m) => m is null).ToArray();
-			if (emptyValues.Length == 0)
+			var emptyIndexes = initialValues.IndexesWhere((m) => m is null).ToArray();
+			if (emptyIndexes.Length == 0)
 				continue;
 
-			Assert.InRange(emptyValues.Length, 1, Board.Size);
-			var chosenIndex = emptyValues[RNG.Next(emptyValues.Length)];
+			Assert.InRange(emptyIndexes.Length, 1, Board.Size);
+			var chosenIndex = emptyIndexes[RNG.Next(emptyIndexes.Length)];
 
 			Mark?[] expectedValues = [.. initialValues]; // cloning the array
 			var chosenMark = RNG.Next(2) == 0 ? Mark.X : Mark.O;
