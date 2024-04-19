@@ -4,27 +4,15 @@ namespace TicTacToe.Tests.Data.BoardTests;
 
 public class Won
 {
-	public static object[][] WinPatterns =
-	[
-		["XXX,,,,,,"],
-		[",,,XXX,,,"],
-		[",,,,,,XXX"],
-		["X,,X,,X,,"],
-		[",X,,X,,X,"],
-		[",,X,,X,,X"],
-		["X,,,X,,,X"],
-		[",,X,X,X,,"],
-	];
-
-	public static object[][] TiePatterns =
-	[
-		["XXOOOXXXO"],
-		["XXOOOXXOX"],
-		["XXOOXXXOO"]
-	];
-
 	[Theory]
-	[MemberData(nameof(WinPatterns))]
+	[InlineData(["XXX,,,,,,"])]
+	[InlineData([",,,XXX,,,"])]
+	[InlineData([",,,,,,XXX"])]
+	[InlineData(["X,,X,,X,,"])]
+	[InlineData([",X,,X,,X,"])]
+	[InlineData([",,X,,X,,X"])]
+	[InlineData(["X,,,X,,,X"])]
+	[InlineData([",,X,X,X,,"])]
 	public void DetectsAllLegalMatches(string pattern)
 	{
 		var oPattern = pattern.Replace('X', 'O');
@@ -38,7 +26,9 @@ public class Won
 	}
 
 	[Theory]
-	[MemberData(nameof(TiePatterns))]
+	[InlineData(["XXOOOXXXO"])]
+	[InlineData(["XXOOOXXOX"])]
+	[InlineData(["XXOOXXXOO"])]
 	public void DetectsNoMatch(string pattern)
 	{
 		var board = new Board(pattern);
@@ -49,15 +39,6 @@ public class Won
 
 public class Empty
 {
-	public static object[][] NonEmptyPatterns =
-	[
-		["XO,XO,XO,"],
-		["XXXXXXXX,"],
-		[",XXXXXXXX"],
-		["X,,,,,,,,"],
-		[",,,,,,,,X"],
-	];
-
 	[Fact]
 	public void DetectsEmpty()
 	{
@@ -66,7 +47,11 @@ public class Empty
 	}
 
 	[Theory]
-	[MemberData(nameof(NonEmptyPatterns))]
+	[InlineData(["XO,XO,XO,"])]
+	[InlineData(["XXXXXXXX,"])]
+	[InlineData([",XXXXXXXX"])]
+	[InlineData(["X,,,,,,,,"])]
+	[InlineData([",,,,,,,,X"])]
 	public void DetectsNonEmpty(string pattern)
 	{
 		Assert.False(new Board(pattern).Empty());
@@ -75,31 +60,21 @@ public class Empty
 
 public class Full
 {
-	public static object[][] FullPatterns =
-	[
-		["XXOOOXXXO"],
-		["XXOOOXXOX"],
-		["XXOOXXXOO"],
-	];
-
-	public static object[][] NotFullPatterns =
-	[
-		["XO,XO,XO,"],
-		["XXXXXXXX,"],
-		[",XXXXXXXX"],
-		["X,,,,,,,,"],
-		[",,,,,,,,X"],
-	];
-
 	[Theory]
-	[MemberData(nameof(FullPatterns))]
+	[InlineData(["XXOOOXXXO"])]
+	[InlineData(["XXOOOXXOX"])]
+	[InlineData(["XXOOXXXOO"])]
 	public void DetectsFull(string pattern)
 	{
 		Assert.True(new Board(pattern).Full());
 	}
 
 	[Theory]
-	[MemberData(nameof(NotFullPatterns))]
+	[InlineData(["XO,XO,XO,"])]
+	[InlineData(["XXXXXXXX,"])]
+	[InlineData([",XXXXXXXX"])]
+	[InlineData(["X,,,,,,,,"])]
+	[InlineData([",,,,,,,,X"])]
 	public void DetectsNotFull(string pattern)
 	{
 		Assert.False(new Board(pattern).Full());
