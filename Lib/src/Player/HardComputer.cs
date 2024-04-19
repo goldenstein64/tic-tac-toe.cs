@@ -103,12 +103,8 @@ public class HardComputer : IPlayer
 	IEnumerable<int> Actions(Board board) =>
 		SymmetricActions(board) ?? SimpleActions(board);
 
-	public static Board ResultOf(Board board, Mark mark, int action)
-	{
-		var newBoard = new Board(board);
-		newBoard.SetMark(action, mark);
-		return newBoard;
-	}
+	public static Board ResultOf(Board board, Mark mark, int action) =>
+		new(board) { [action] = mark };
 
 	public static int? Terminal(Board board)
 	{

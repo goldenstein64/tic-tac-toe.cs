@@ -55,7 +55,7 @@ public class Application(IConnection connection)
 		{
 			var currentPlayer = players[currentIndex];
 			var move = currentPlayer.GetMove(board, currentMark);
-			board.SetMark(move, currentMark);
+			board[move] = currentMark;
 			Conn.Print(IOMessages.MSG_Board, board);
 			if (board.Won(currentMark))
 				return currentMark;
