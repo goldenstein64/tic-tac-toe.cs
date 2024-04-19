@@ -134,16 +134,16 @@ public class CanMark
 	}
 }
 
-public class SetMark
+public class IndexOperator
 {
 	[Fact]
 	public void ThrowsOnOccupied()
 	{
 		var board = new Board(",,X,,,,,,");
 
-		Assert.Throws<ArgumentException>(() => board.SetMark(2, Mark.O));
+		Assert.Throws<ArgumentException>(() => board[2] = Mark.O);
 
-		board.SetMark(1, Mark.O);
+		board[1] = Mark.O;
 	}
 
 	[Fact]
@@ -151,9 +151,9 @@ public class SetMark
 	{
 		var board = new Board(",,,,,,,,,");
 
-		Assert.Throws<IndexOutOfRangeException>(() => board.SetMark(-1, Mark.X));
+		Assert.Throws<IndexOutOfRangeException>(() => board[-1] = Mark.X);
 
-		board.SetMark(0, Mark.X);
+		board[0] = Mark.X;
 	}
 
 	[Fact]
@@ -163,7 +163,7 @@ public class SetMark
 		{
 			var board = new Board();
 			Assert.True(board.CanMark(i));
-			board.SetMark(i, Mark.X);
+			board[i] = Mark.X;
 			Assert.False(board.CanMark(i));
 		}
 	}

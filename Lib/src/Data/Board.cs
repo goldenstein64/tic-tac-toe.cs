@@ -33,7 +33,13 @@ public class Board : IEnumerable<Mark?>
 	public Mark? this[int index]
 	{
 		get => Data[index];
-		set => Data[index] = value;
+		set
+		{
+			if (Data[index] is not null && value is not null)
+				throw new ArgumentException("This position is already marked!");
+
+			Data[index] = value;
+		}
 	}
 
 	public IEnumerator<Mark?> GetEnumerator()
@@ -73,16 +79,6 @@ public class Board : IEnumerable<Mark?>
 		pos is >= 0 and < Size && Data[pos] == mark;
 
 	public bool CanMark(int pos) => IsMarkedWith(pos, null);
-
-	public void SetMark(int pos, Mark? mark)
-	{
-		if (Data[pos] is not null)
-		{
-			throw new ArgumentException("This position is already marked!");
-		}
-
-		Data[pos] = mark;
-	}
 
 	/// <summary>
 	/// creates a string representation of this board. This one uses ASCII.
