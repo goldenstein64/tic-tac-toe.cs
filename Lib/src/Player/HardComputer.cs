@@ -98,7 +98,7 @@ public class HardComputer : IPlayer
 	}
 
 	static IEnumerable<int> SimpleActions(Board board) =>
-		Enumerable.Range(0, 9).Where(board.CanMark);
+		Enumerable.Range(0, Board.Size).Where(board.CanMark);
 
 	IEnumerable<int> Actions(Board board) =>
 		SymmetricActions(board) ?? SimpleActions(board);

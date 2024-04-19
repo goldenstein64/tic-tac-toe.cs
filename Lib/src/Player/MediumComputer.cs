@@ -6,7 +6,7 @@ namespace TicTacToe.Player;
 public class MediumComputer : IPlayer
 {
 	static readonly int[][] WinPatternMap = Enumerable
-		.Range(0, 9)
+		.Range(0, Board.Size)
 		.Select(
 			(i) =>
 				Board

@@ -17,7 +17,7 @@ public class Human(IConnection connection) : IPlayer
 		}
 
 		var result = (int)@in;
-		if (result is < 1 or > 9)
+		if (result is < 1 or > Board.Size)
 		{
 			Conn.Print(IOMessages.ERR_NumberOutOfRange);
 			return null;
