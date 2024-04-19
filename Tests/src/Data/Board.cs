@@ -4,84 +4,105 @@ namespace TicTacToe.Tests.Data.BoardTests;
 
 public class Won
 {
-	[Fact]
-	public void DetectsAllLegalMatches()
-	{
-		string[] winPatterns =
-		[
-			"XXX,,,,,,",
-			",,,XXX,,,",
-			",,,,,,XXX",
-			"X,,X,,X,,",
-			",X,,X,,X,",
-			",,X,,X,,X",
-			"X,,,X,,,X",
-			",,X,X,X,,",
-		];
+	public static object[][] WinPatterns =
+	[
+		["XXX,,,,,,"],
+		[",,,XXX,,,"],
+		[",,,,,,XXX"],
+		["X,,X,,X,,"],
+		[",X,,X,,X,"],
+		[",,X,,X,,X"],
+		["X,,,X,,,X"],
+		[",,X,X,X,,"],
+	];
 
-		foreach (var pattern in winPatterns)
-		{
-			var oPattern = pattern.Replace('X', 'O');
-			var xBoard = new Board(pattern);
-			var oBoard = new Board(oPattern);
-			Assert.True(xBoard.Won(Mark.X));
-			Assert.True(oBoard.Won(Mark.O));
-			Assert.False(xBoard.Won(Mark.O));
-			Assert.False(oBoard.Won(Mark.X));
-		}
+	public static object[][] TiePatterns =
+	[
+		["XXOOOXXXO"],
+		["XXOOOXXOX"],
+		["XXOOXXXOO"]
+	];
+
+	[Theory]
+	[MemberData(nameof(WinPatterns))]
+	public void DetectsAllLegalMatches(string pattern)
+	{
+		var oPattern = pattern.Replace('X', 'O');
+		var xBoard = new Board(pattern);
+		var oBoard = new Board(oPattern);
+
+		Assert.True(xBoard.Won(Mark.X));
+		Assert.True(oBoard.Won(Mark.O));
+		Assert.False(xBoard.Won(Mark.O));
+		Assert.False(oBoard.Won(Mark.X));
 	}
 
-	[Fact]
-	public void DetectsNoMatch()
+	[Theory]
+	[MemberData(nameof(TiePatterns))]
+	public void DetectsNoMatch(string pattern)
 	{
-		string[] tiePatterns = ["XXOOOXXXO", "XXOOOXXOX", "XXOOXXXOO"];
-
-		foreach (var pattern in tiePatterns)
-		{
-			var board = new Board(pattern);
-			Assert.False(board.Won(Mark.X));
-			Assert.False(board.Won(Mark.O));
-		}
+		var board = new Board(pattern);
+		Assert.False(board.Won(Mark.X));
+		Assert.False(board.Won(Mark.O));
 	}
 }
 
 public class Empty
 {
+	public static object[][] NonEmptyPatterns =
+	[
+		["XO,XO,XO,"],
+		["XXXXXXXX,"],
+		[",XXXXXXXX"],
+		["X,,,,,,,,"],
+		[",,,,,,,,X"],
+	];
+
 	[Fact]
 	public void DetectsEmpty()
 	{
+		Assert.True(new Board().Empty());
 		Assert.True(new Board(",,,,,,,,,").Empty());
 	}
 
-	[Fact]
-	public void DetectsNonEmpty()
+	[Theory]
+	[MemberData(nameof(NonEmptyPatterns))]
+	public void DetectsNonEmpty(string pattern)
 	{
-		Assert.False(new Board("XO,XO,XO,").Empty());
-		Assert.False(new Board("XXXXXXXX,").Empty());
-		Assert.False(new Board(",XXXXXXXX").Empty());
-		Assert.False(new Board("X,,,,,,,,").Empty());
-		Assert.False(new Board(",,,,,,,,X").Empty());
+		Assert.False(new Board(pattern).Empty());
 	}
 }
 
 public class Full
 {
-	[Fact]
-	public void DetectsFull()
+	public static object[][] FullPatterns =
+	[
+		["XXOOOXXXO"],
+		["XXOOOXXOX"],
+		["XXOOXXXOO"],
+	];
+
+	public static object[][] NotFullPatterns =
+	[
+		["XO,XO,XO,"],
+		["XXXXXXXX,"],
+		[",XXXXXXXX"],
+		["X,,,,,,,,"],
+		[",,,,,,,,X"],
+	];
+
+	[Theory]
+	[MemberData(nameof(FullPatterns))]
+	public void DetectsFull(string pattern)
 	{
-		Assert.True(new Board("XXOOOXXXO").Full());
-		Assert.True(new Board("XXOOOXXOX").Full());
-		Assert.True(new Board("XXOOXXXOO").Full());
+		Assert.True(new Board(pattern).Full());
 	}
 
-	[Fact]
-	public void DetectsNotFull()
+	[Theory]
+	[MemberData(nameof(NotFullPatterns))]
+	public void DetectsNotFull(string pattern)
 	{
-		Assert.False(new Board("XO,XO,XO,").Full());
-		Assert.False(new Board("XXXXXXXX,").Full());
-		Assert.False(new Board(",XXXXXXXX").Full());
-		Assert.False(new Board("X,,,,,,,,").Full());
-		Assert.False(new Board(",,,,,,,,X").Full());
+		Assert.False(new Board(pattern).Full());
 	}
 }
 
