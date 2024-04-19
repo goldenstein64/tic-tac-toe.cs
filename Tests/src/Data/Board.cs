@@ -34,7 +34,7 @@ public class Won
 	[Fact]
 	public void DetectsNoMatch()
 	{
-		string[] tiePatterns = ["XXOOOXXXO", "XXOOOXXOX", "XXOOXXXOO",];
+		string[] tiePatterns = ["XXOOOXXXO", "XXOOOXXOX", "XXOOXXXOO"];
 
 		foreach (var pattern in tiePatterns)
 		{
