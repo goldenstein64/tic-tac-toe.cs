@@ -147,6 +147,16 @@ public class SetMark
 	}
 
 	[Fact]
+	public void ThrowsOnBadPosition()
+	{
+		var board = new Board(",,,,,,,,,");
+
+		Assert.Throws<IndexOutOfRangeException>(() => board.SetMark(-1, Mark.X));
+
+		board.SetMark(0, Mark.X);
+	}
+
+	[Fact]
 	public void ChangesState()
 	{
 		for (var i = 0; i < Board.Size; i++)
