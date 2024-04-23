@@ -83,54 +83,51 @@ public class Full
 
 public class IsMarkedWith
 {
-	[Fact]
-	public void FalseOnBadPosition()
+	[Theory]
+	[InlineData([-1, false])]
+	[InlineData([0, true])]
+	[InlineData([1, true])]
+	[InlineData([7, true])]
+	[InlineData([8, true])]
+	[InlineData([9, false])]
+	public void FalseOnBadPosition(int pos, bool expected)
 	{
-		var empty = new Board();
-
-		Assert.False(empty.IsMarkedWith(-1, null));
-		Assert.True(empty.IsMarkedWith(0, null));
-		Assert.True(empty.IsMarkedWith(1, null));
-		Assert.True(empty.IsMarkedWith(7, null));
-		Assert.True(empty.IsMarkedWith(8, null));
-		Assert.False(empty.IsMarkedWith(9, null));
+		Assert.Equal(expected, new Board().IsMarkedWith(pos, null));
 	}
 
-	[Fact]
-	public void MatchesOnMark()
+	[Theory]
+	[InlineData([0, Mark.X, true])]
+	[InlineData([0, Mark.O, false])]
+	[InlineData([0, null, false])]
+	[InlineData([1, Mark.X, false])]
+	[InlineData([1, Mark.O, true])]
+	[InlineData([1, null, false])]
+	[InlineData([2, Mark.X, false])]
+	[InlineData([2, Mark.O, false])]
+	[InlineData([2, null, true])]
+	public void MatchesOnMark(int pos, Mark? mark, bool expected)
 	{
 		var board = new Board("XO,XO,XO,");
-
-		Assert.True(board.IsMarkedWith(0, Mark.X));
-		Assert.False(board.IsMarkedWith(0, Mark.O));
-		Assert.False(board.IsMarkedWith(0, null));
-
-		Assert.False(board.IsMarkedWith(1, Mark.X));
-		Assert.True(board.IsMarkedWith(1, Mark.O));
-		Assert.False(board.IsMarkedWith(1, null));
-
-		Assert.False(board.IsMarkedWith(2, Mark.X));
-		Assert.False(board.IsMarkedWith(2, Mark.O));
-		Assert.True(board.IsMarkedWith(2, null));
+		Assert.Equal(expected, board.IsMarkedWith(pos, mark));
 	}
 }
 
 public class CanMark
 {
-	[Fact]
-	public void MatchesOnNull()
+	[Theory]
+	[InlineData([0, false])]
+	[InlineData([1, false])]
+	[InlineData([2, true])]
+	[InlineData([3, false])]
+	[InlineData([4, false])]
+	[InlineData([5, true])]
+	[InlineData([6, false])]
+	[InlineData([7, false])]
+	[InlineData([8, true])]
+	public void MatchesOnNull(int pos, bool expected)
 	{
 		var board = new Board("XO,XO,XO,");
-
-		Assert.False(board.CanMark(0));
-		Assert.False(board.CanMark(1));
-		Assert.True(board.CanMark(2));
-		Assert.False(board.CanMark(3));
-		Assert.False(board.CanMark(4));
-		Assert.True(board.CanMark(5));
-		Assert.False(board.CanMark(6));
-		Assert.False(board.CanMark(7));
-		Assert.True(board.CanMark(8));
+		Assert.Equal(expected, board.CanMark(pos));
 	}
 }
 
