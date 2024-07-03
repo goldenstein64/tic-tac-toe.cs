@@ -34,9 +34,8 @@ public class MediumComputer : IPlayer
 			int markCount = 0;
 			int? emptyIndex = null;
 
-			foreach (var i in pattern)
+			foreach (var (i, found) in pattern.Zip(boardPattern))
 			{
-				var found = board[i];
 				if (found == mark)
 					markCount += 1;
 				else if (found is null)
