@@ -7,19 +7,19 @@ namespace TicTacToe;
 /// <summary>
 /// The main class responsible for running a game of tic-tac-toe.
 /// </summary>
-public class Application(IConnection2 connection2)
+public class Application(IConnection connection)
 {
-	public IConnection2 Conn2 = connection2;
+	public IConnection Conn = connection;
 
-	IPlayer? RespondNull(Message2 message2)
+	IPlayer? RespondNull(Message message)
 	{
-		Conn2.Print(message2);
+		Conn.Print(message);
 		return null;
 	}
 
 	IPlayer? ChooseComputerOnce(Mark mark)
 	{
-		return Conn2.Prompt(new MSG_PromptComputer(mark)) switch
+		return Conn.Prompt(new MSG_PromptComputer(mark)) switch
 		{
 			"E" => new EasyComputer(),
 			"M" => new MediumComputer(),
@@ -30,9 +30,9 @@ public class Application(IConnection2 connection2)
 
 	public IPlayer? ChoosePlayerOnce(Mark mark)
 	{
-		return Conn2.Prompt(new MSG_PromptPlayer(mark)) switch
+		return Conn.Prompt(new MSG_PromptPlayer(mark)) switch
 		{
-			"H" => new Human(Conn2),
+			"H" => new Human(Conn),
 			"C" => ChooseComputerOnce(mark),
 			_ => RespondNull(new ERR_PlayerInvalid()),
 		};
@@ -54,13 +54,13 @@ public class Application(IConnection2 connection2)
 	{
 		var currentIndex = 0;
 		var currentMark = Mark.X;
-		Conn2.Print(new MSG_Board(board));
+		Conn.Print(new MSG_Board(board));
 		while (!board.Full())
 		{
 			var currentPlayer = players[currentIndex];
 			var move = currentPlayer.GetMove(board, currentMark);
 			board[move] = currentMark;
-			Conn2.Print(new MSG_Board(board));
+			Conn.Print(new MSG_Board(board));
 			if (board.Won(currentMark))
 				return currentMark;
 
@@ -75,11 +75,11 @@ public class Application(IConnection2 connection2)
 	{
 		if (winner is Mark mark)
 		{
-			Conn2.Print(new MSG_PlayerWon(mark));
+			Conn.Print(new MSG_PlayerWon(mark));
 		}
 		else
 		{
-			Conn2.Print(new MSG_Tied());
+			Conn.Print(new MSG_Tied());
 		}
 	}
 }

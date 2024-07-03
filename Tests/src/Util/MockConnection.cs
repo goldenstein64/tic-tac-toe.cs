@@ -2,16 +2,16 @@ using TicTacToe.Messages;
 
 namespace TicTacToe.Tests.Util;
 
-public class MockConnection2 : IConnection2
+public class MockConnection : IConnection
 {
-	public List<Message2> Outputs = [];
+	public List<Message> Outputs = [];
 	public Queue<string> Inputs = [];
 
-	public string Prompt(Message2 message)
+	public string Prompt(Message message)
 	{
 		Outputs.Add(message);
 		return Inputs.Dequeue();
 	}
 
-	public void Print(Message2 message) => Outputs.Add(message);
+	public void Print(Message message) => Outputs.Add(message);
 }

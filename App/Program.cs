@@ -2,7 +2,7 @@ using TicTacToe;
 using TicTacToe.Data;
 using TicTacToe.Messages;
 
-IConnection2 connection2 = new ConsoleConnection2(
+IConnection connection = new ConsoleConnection(
 	(msg) =>
 		msg switch
 		{
@@ -23,7 +23,7 @@ IConnection2 connection2 = new ConsoleConnection2(
 		}
 );
 
-var app = new Application(connection2);
+var app = new Application(connection);
 
 var players = app.ChoosePlayers();
 var winner = app.PlayGame(new Board(), players);

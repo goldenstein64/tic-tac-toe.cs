@@ -3,23 +3,23 @@ using TicTacToe.Messages;
 
 namespace TicTacToe.Player;
 
-public class Human(IConnection2 connection2) : IPlayer
+public class Human(IConnection connection) : IPlayer
 {
-	public IConnection2 Conn2 = connection2;
+	public IConnection Conn = connection;
 
 	public int? GetMoveOnce(Board board, Mark mark)
 	{
-		var @in = Conn2.PromptInt(new MSG_PromptMove(mark));
+		var @in = Conn.PromptInt(new MSG_PromptMove(mark));
 		if (@in is null)
 		{
-			Conn2.Print(new ERR_NotANumber());
+			Conn.Print(new ERR_NotANumber());
 			return null;
 		}
 
 		var result = (int)@in;
 		if (result is < 1 or > Board.Size)
 		{
-			Conn2.Print(new ERR_NumberOutOfRange());
+			Conn.Print(new ERR_NumberOutOfRange());
 			return null;
 		}
 
@@ -27,7 +27,7 @@ public class Human(IConnection2 connection2) : IPlayer
 
 		if (!board.CanMark(result))
 		{
-			Conn2.Print(new ERR_SpaceOccupied());
+			Conn.Print(new ERR_SpaceOccupied());
 			return null;
 		}
 
