@@ -153,15 +153,17 @@ public class IndexOperator
 		board[0] = Mark.X;
 	}
 
-	[Fact]
-	public void ChangesState()
+	public static IEnumerable<object[]> ChangesStateData = Enumerable
+		.Range(0, 9)
+		.Select<int, object[]>(i => [i]);
+
+	[Theory]
+	[MemberData(nameof(ChangesStateData))]
+	public void ChangesState(int i)
 	{
-		for (var i = 0; i < Board.Size; i++)
-		{
-			var board = new Board();
-			Assert.True(board.CanMark(i));
-			board[i] = Mark.X;
-			Assert.False(board.CanMark(i));
-		}
+		var board = new Board();
+		Assert.True(board.CanMark(i));
+		board[i] = Mark.X;
+		Assert.False(board.CanMark(i));
 	}
 }
