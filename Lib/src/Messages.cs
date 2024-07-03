@@ -1,3 +1,6 @@
+using TicTacToe.Data;
+using TicTacToe.Player;
+
 namespace TicTacToe.Messages;
 
 public enum IOMessages
@@ -14,6 +17,36 @@ public enum IOMessages
 	ERR_NotANumber,
 	ERR_NumberOutOfRange,
 	ERR_SpaceOccupied,
+}
+
+public record Message2;
+
+public record MSG_PromptPlayer(Mark Mark) : Message2;
+
+public record MSG_PromptComputer(Mark Mark) : Message2;
+
+public record MSG_PlayerWon(Mark Mark) : Message2;
+
+public record MSG_Tied : Message2;
+
+public record MSG_Board(Board Board) : Message2;
+
+public record ERR_PlayerInvalid : Message2;
+
+public record ERR_ComputerInvalid : Message2;
+
+public record MSG_PromptMove(Mark Mark) : Message2;
+
+public record ERR_NotANumber : Message2;
+
+public record ERR_NumberOutOfRange : Message2;
+
+public record ERR_SpaceOccupied : Message2;
+
+public interface IConnection2
+{
+	public string Prompt(Message2 message);
+	public void Print(Message2 message);
 }
 
 public interface IConnection

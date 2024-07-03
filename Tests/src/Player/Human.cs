@@ -8,11 +8,12 @@ namespace TicTacToe.Tests.Player.HumanTests;
 public class UsesHuman
 {
 	public MockConnection Connection = new();
+	public MockConnection2 Connection2 = new();
 	public Human Subject;
 
 	public UsesHuman()
 	{
-		Subject = new Human(Connection);
+		Subject = new Human(Connection, Connection2);
 	}
 
 	public void AssertPrints(IOMessages message)
@@ -20,9 +21,19 @@ public class UsesHuman
 		Assert.Contains(message, Connection.Outputs);
 	}
 
+	public void AssertPrints2(Message2 message)
+	{
+		Assert.Contains(message, Connection2.Outputs);
+	}
+
 	public void AssertDoesNotPrint(IOMessages message)
 	{
 		Assert.DoesNotContain(message, Connection.Outputs);
+	}
+
+	public void AssertDoesNotPrint2(Message2 message)
+	{
+		Assert.DoesNotContain(message, Connection2.Outputs);
 	}
 }
 
@@ -36,6 +47,7 @@ public class GetMoveOnce : UsesHuman
 
 		var move = Subject.GetMoveOnce(board, Mark.X);
 		Assert.Equal([IOMessages.MSG_PromptMove], Connection.Outputs);
+		Assert.Equal([new MSG_PromptMove(Mark.X)], Connection2.Outputs);
 		Assert.Equal(1, move);
 	}
 
@@ -50,6 +62,10 @@ public class GetMoveOnce : UsesHuman
 		Assert.Equal(
 			[IOMessages.MSG_PromptMove, IOMessages.ERR_SpaceOccupied],
 			Connection.Outputs
+		);
+		Assert.Equal(
+			[new MSG_PromptMove(Mark.X), new ERR_SpaceOccupied()],
+			Connection2.Outputs
 		);
 
 		Assert.Null(move);
@@ -67,6 +83,10 @@ public class GetMoveOnce : UsesHuman
 			[IOMessages.MSG_PromptMove, IOMessages.ERR_NumberOutOfRange],
 			Connection.Outputs
 		);
+		Assert.Equal(
+			[new MSG_PromptMove(Mark.X), new ERR_NumberOutOfRange()],
+			Connection2.Outputs
+		);
 
 		Assert.Null(move);
 	}
@@ -83,6 +103,10 @@ public class GetMoveOnce : UsesHuman
 			[IOMessages.MSG_PromptMove, IOMessages.ERR_NotANumber],
 			Connection.Outputs
 		);
+		Assert.Equal(
+			[new MSG_PromptMove(Mark.X), new ERR_NotANumber()],
+			Connection2.Outputs
+		);
 
 		Assert.Null(move);
 	}
@@ -98,6 +122,10 @@ public class GetMoveOnce : UsesHuman
 		Assert.Equal(
 			[IOMessages.MSG_PromptMove, IOMessages.ERR_NotANumber],
 			Connection.Outputs
+		);
+		Assert.Equal(
+			[new MSG_PromptMove(Mark.X), new ERR_NotANumber()],
+			Connection2.Outputs
 		);
 
 		Assert.Null(move);

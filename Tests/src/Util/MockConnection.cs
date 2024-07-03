@@ -13,8 +13,20 @@ public class MockConnection : IConnection
 		return Inputs.Dequeue();
 	}
 
-	public void Print(IOMessages message, params object[] args)
+	public void Print(IOMessages message, params object[] args) =>
+		Outputs.Add(message);
+}
+
+public class MockConnection2 : IConnection2
+{
+	public List<Message2> Outputs = [];
+	public Queue<string> Inputs = [];
+
+	public string Prompt(Message2 message)
 	{
 		Outputs.Add(message);
+		return Inputs.Dequeue();
 	}
+
+	public void Print(Message2 message) => Outputs.Add(message);
 }
