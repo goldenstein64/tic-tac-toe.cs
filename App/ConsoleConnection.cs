@@ -1,4 +1,6 @@
-namespace TicTacToe.Messages;
+using TicTacToe.Data.Messages;
+
+namespace TicTacToe.App;
 
 public class ConsoleConnection(Func<Message, string> formatFunc) : IConnection
 {

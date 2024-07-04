@@ -1,4 +1,4 @@
-using TicTacToe.Messages;
+using TicTacToe.Data.Messages;
 
 namespace TicTacToe.Tests.Util;
 

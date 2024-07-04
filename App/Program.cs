@@ -1,6 +1,7 @@
 using TicTacToe;
+using TicTacToe.App;
 using TicTacToe.Data;
-using TicTacToe.Messages;
+using TicTacToe.Data.Messages;
 
 IConnection connection = new ConsoleConnection(
 	(msg) =>

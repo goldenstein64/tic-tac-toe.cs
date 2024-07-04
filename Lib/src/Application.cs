@@ -1,5 +1,5 @@
 ﻿using TicTacToe.Data;
-using TicTacToe.Messages;
+using TicTacToe.Data.Messages;
 using TicTacToe.Player;
 
 namespace TicTacToe;

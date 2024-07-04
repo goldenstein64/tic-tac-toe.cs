@@ -1,7 +1,4 @@
-using TicTacToe.Data;
-using TicTacToe.Player;
-
-namespace TicTacToe.Messages;
+namespace TicTacToe.Data.Messages;
 
 public record Message;
 
