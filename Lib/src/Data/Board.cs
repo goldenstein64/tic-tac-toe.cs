@@ -66,14 +66,14 @@ public class Board : IEnumerable<Mark?>
 	];
 
 	public bool PatternWon(Mark mark, int[] pattern) =>
-		pattern.All((pos) => Data[pos] == mark);
+		pattern.All(pos => Data[pos] == mark);
 
 	public bool Won(Mark mark) =>
-		WinPatterns.Any((pattern) => PatternWon(mark, pattern));
+		WinPatterns.Any(pattern => PatternWon(mark, pattern));
 
-	public bool Full() => Data.All((mark) => mark is not null);
+	public bool Full() => Data.All(mark => mark is not null);
 
-	public bool Empty() => Data.All((mark) => mark is null);
+	public bool Empty() => Data.All(mark => mark is null);
 
 	public bool IsMarkedWith(int pos, Mark? mark) =>
 		pos is >= 0 and < Size && Data[pos] == mark;
