@@ -15,9 +15,7 @@ public class Terminal
 	public void FullBoard_ReturnsZero()
 	{
 		var board = new Board("OXXXOOOXX");
-
 		var terminal = HardComputer.Terminal(board);
-
 		Assert.Equal(0, terminal);
 	}
 
@@ -25,9 +23,7 @@ public class Terminal
 	public void BoardThatXWon_ReturnsOne()
 	{
 		var board = new Board("X,,XOOX,,");
-
 		var terminal = HardComputer.Terminal(board);
-
 		Assert.Equal(1, terminal);
 	}
 
@@ -35,9 +31,7 @@ public class Terminal
 	public void FullBoardThatXWon_ReturnsOne()
 	{
 		var board = new Board("XXXXOOOXO");
-
 		var terminal = HardComputer.Terminal(board);
-
 		Assert.Equal(1, terminal);
 	}
 
@@ -45,9 +39,7 @@ public class Terminal
 	public void BoardThatOWon_ReturnsNegOne()
 	{
 		var board = new Board("O,,OXXO,X");
-
 		var terminal = HardComputer.Terminal(board);
-
 		Assert.Equal(-1, terminal);
 	}
 
@@ -55,10 +47,16 @@ public class Terminal
 	public void FullBoardThatOWon_ReturnsNegOne()
 	{
 		var board = new Board("XXOXOXOOX");
-
 		var terminal = HardComputer.Terminal(board);
-
 		Assert.Equal(-1, terminal);
+	}
+
+	[Fact]
+	public void InProgressBoardReturnsNull()
+	{
+		var board = new Board("XX,OO,XX,");
+		var terminal = HardComputer.Terminal(board);
+		Assert.Null(terminal);
 	}
 }
 
