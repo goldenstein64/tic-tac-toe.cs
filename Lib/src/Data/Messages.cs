@@ -1,28 +1,28 @@
 namespace TicTacToe.Data.Messages;
 
-public record Message;
+public abstract record Message;
 
-public record MSG_PromptPlayer(Mark Mark) : Message;
+public sealed record MSG_PromptPlayer(Mark Mark) : Message;
 
-public record MSG_PromptComputer(Mark Mark) : Message;
+public sealed record MSG_PromptComputer(Mark Mark) : Message;
 
-public record MSG_PlayerWon(Mark Mark) : Message;
+public sealed record MSG_PlayerWon(Mark Mark) : Message;
 
-public record MSG_Tied : Message;
+public sealed record MSG_Tied : Message;
 
-public record MSG_Board(Board Board) : Message;
+public sealed record MSG_Board(Board Board) : Message;
 
-public record ERR_PlayerInvalid : Message;
+public sealed record ERR_PlayerInvalid : Message;
 
-public record ERR_ComputerInvalid : Message;
+public sealed record ERR_ComputerInvalid : Message;
 
-public record MSG_PromptMove(Mark Mark) : Message;
+public sealed record MSG_PromptMove(Mark Mark) : Message;
 
-public record ERR_NotANumber : Message;
+public sealed record ERR_NotANumber : Message;
 
-public record ERR_NumberOutOfRange : Message;
+public sealed record ERR_NumberOutOfRange : Message;
 
-public record ERR_SpaceOccupied : Message;
+public sealed record ERR_SpaceOccupied : Message;
 
 public interface IConnection
 {
