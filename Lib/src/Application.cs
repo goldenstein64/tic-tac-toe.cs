@@ -7,9 +7,12 @@ namespace TicTacToe;
 /// <summary>
 /// The main class responsible for running a game of tic-tac-toe.
 /// </summary>
-public class Application(IConnection connection)
+public class Application(IConnection connection, Board? board = null)
 {
-	public IConnection Conn = connection;
+	public readonly IConnection Conn = connection;
+	public readonly Board Board = board ?? new();
+
+	record EndedResult(Mark? Winner);
 
 	IPlayer? RespondNull(Message message)
 	{
@@ -50,25 +53,32 @@ public class Application(IConnection connection)
 	public IPlayer[] ChoosePlayers() =>
 		[ChoosePlayer(Mark.X), ChoosePlayer(Mark.O)];
 
-	public Mark? PlayGame(Board board, IPlayer[] players)
+	EndedResult? PlayTurn(IPlayer player, Mark mark)
+	{
+		var move = player.GetMove(Board, mark);
+		Board[move] = mark;
+		return Board.Won(mark)
+			? new(mark)
+			: Board.Full()
+				? new(null)
+				: null;
+	}
+
+	public Mark? PlayGame(IPlayer[] players)
 	{
 		var currentIndex = 0;
-		var currentMark = Mark.X;
-		Conn.Print(new MSG_Board(board));
-		while (!board.Full())
+		Conn.Print(new MSG_Board(Board));
+		while (true)
 		{
-			var currentPlayer = players[currentIndex];
-			var move = currentPlayer.GetMove(board, currentMark);
-			board[move] = currentMark;
-			Conn.Print(new MSG_Board(board));
-			if (board.Won(currentMark))
-				return currentMark;
+			var mark = currentIndex % 2 == 0 ? Mark.X : Mark.O;
+			var player = players[currentIndex];
+			var maybeResult = PlayTurn(player, mark);
+			Conn.Print(new MSG_Board(Board));
+			if (maybeResult is EndedResult result)
+				return result.Winner;
 
 			currentIndex = (currentIndex + 1) % players.Length;
-			currentMark = currentMark.Other();
 		}
-
-		return null;
 	}
 
 	public void DisplayWinner(Mark? winner)

@@ -247,27 +247,26 @@ public class PlayGame : UsesApplication
 
 		var human1 = new Human(Connection);
 		var human2 = new Human(Connection);
-		var board = new Board();
-		var winner = Subject.PlayGame(board, [human1, human2]);
+		var winner = Subject.PlayGame([human1, human2]);
 
 		Assert.Equal(Mark.X, winner);
 		Assert.Equal(
 			[
-				new MSG_Board(board),
+				new MSG_Board(Subject.Board),
 				new MSG_PromptMove(Mark.X), // "1"
-				new MSG_Board(board),
+				new MSG_Board(Subject.Board),
 				new MSG_PromptMove(Mark.O), // "2"
-				new MSG_Board(board),
+				new MSG_Board(Subject.Board),
 				new MSG_PromptMove(Mark.X), // "7"
-				new MSG_Board(board),
+				new MSG_Board(Subject.Board),
 				new MSG_PromptMove(Mark.O), // "4"
-				new MSG_Board(board),
+				new MSG_Board(Subject.Board),
 				new MSG_PromptMove(Mark.X), // "9"
-				new MSG_Board(board),
+				new MSG_Board(Subject.Board),
 				new MSG_PromptMove(Mark.O), // "5"
-				new MSG_Board(board),
+				new MSG_Board(Subject.Board),
 				new MSG_PromptMove(Mark.X), // "8"
-				new MSG_Board(board),
+				new MSG_Board(Subject.Board),
 			],
 			Connection.Outputs
 		);
@@ -276,9 +275,8 @@ public class PlayGame : UsesApplication
 	[Fact]
 	public void CanRunBetweenComputers()
 	{
-		var board = new Board();
-		Subject.PlayGame(board, [new MediumComputer(), new MediumComputer()]);
+		Subject.PlayGame([new MediumComputer(), new MediumComputer()]);
 
-		AssertPrints(new MSG_Board(board));
+		AssertPrints(new MSG_Board(Subject.Board));
 	}
 }

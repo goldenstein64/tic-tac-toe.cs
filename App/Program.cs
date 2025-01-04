@@ -27,5 +27,5 @@ IConnection connection = new ConsoleConnection(
 var app = new Application(connection);
 
 var players = app.ChoosePlayers();
-var winner = app.PlayGame(new Board(), players);
+var winner = app.PlayGame(players);
 app.DisplayWinner(winner);
