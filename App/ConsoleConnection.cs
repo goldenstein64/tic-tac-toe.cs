@@ -4,7 +4,7 @@ namespace TicTacToe.App;
 
 public class ConsoleConnection(Func<Message, string> formatFunc) : IConnection
 {
-	Func<Message, string> Format = formatFunc;
+	readonly Func<Message, string> Format = formatFunc;
 
 	public string Prompt(Message message)
 	{
