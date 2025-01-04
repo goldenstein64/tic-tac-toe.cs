@@ -3,10 +3,8 @@ using TicTacToe.Util.EnumerableExtensions;
 
 namespace TicTacToe.Player;
 
-public class HardComputer : IPlayer
+public class HardComputer : Computer
 {
-	readonly Random MoveRNG = new();
-
 	static readonly (int a, int b)[] Equalities =
 	[
 		(0, 2),
@@ -100,25 +98,22 @@ public class HardComputer : IPlayer
 	static IEnumerable<int> SimpleActions(Board board) =>
 		Enumerable.Range(0, Board.Size).Where(board.CanMark);
 
-	IEnumerable<int> Actions(Board board) =>
+	static IEnumerable<int> Actions(Board board) =>
 		SymmetricActions(board) ?? SimpleActions(board);
 
 	public static Board ResultOf(Board board, Mark mark, int action) =>
 		new(board) { [action] = mark };
 
-	public static int? Terminal(Board board)
-	{
-		if (board.Won(Mark.X))
-			return 1;
-		else if (board.Won(Mark.O))
-			return -1;
-		else if (board.Full())
-			return 0;
+	public static int? Terminal(Board board) =>
+		board.Won(Mark.X)
+			? 1
+			: board.Won(Mark.O)
+				? -1
+				: board.Full()
+					? 0
+					: null;
 
-		return null;
-	}
-
-	int Judge(Board board, Mark mark)
+	static int Judge(Board board, Mark mark)
 	{
 		if (Terminal(board) is int terminal)
 			return terminal;
@@ -130,7 +125,7 @@ public class HardComputer : IPlayer
 			.Aggregate(Controls(mark), Reconcilers(mark));
 	}
 
-	public List<int> GetMoves(Board board, Mark mark)
+	public override List<int> GetMoves(Board board, Mark mark)
 	{
 		var otherMark = mark.Other();
 
@@ -148,18 +143,6 @@ public class HardComputer : IPlayer
 			.ToList();
 	}
 
-	public int GetMove(Board board, Mark mark)
-	{
-		if (board.Empty())
-		{
-			return MoveRNG.Next(Board.Size);
-		}
-		else
-		{
-			var moves = GetMoves(board, mark);
-			if (moves.Count <= 0)
-				throw new("no moves to take!");
-			return moves[MoveRNG.Next(moves.Count)];
-		}
-	}
+	public override int GetMove(Board board, Mark mark) =>
+		board.Empty() ? MoveRNG.Next(Board.Size) : base.GetMove(board, mark);
 }

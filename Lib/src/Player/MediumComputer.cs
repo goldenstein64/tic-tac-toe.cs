@@ -3,7 +3,7 @@ using TicTacToe.Util.EnumerableExtensions;
 
 namespace TicTacToe.Player;
 
-public class MediumComputer : IPlayer
+public class MediumComputer : Computer
 {
 	static readonly int[][] WinPatternMap = Enumerable
 		.Range(0, Board.Size)
@@ -14,8 +14,6 @@ public class MediumComputer : IPlayer
 					.ToArray()
 		)
 		.ToArray();
-
-	readonly Random MoveRNG = new();
 
 	const int Center = 4;
 	static readonly int[] Corners = [0, 2, 6, 8];
@@ -110,17 +108,12 @@ public class MediumComputer : IPlayer
 		return result.Count > 0 ? result : null;
 	}
 
-	public int GetMove(Board board, Mark mark)
-	{
-		var moves =
-			GetWinningMoves(board, mark)
-			?? GetBlockingMoves(board, mark)
-			?? GetTrappingMoves(board, mark)
-			?? GetCenterMove(board, mark)
-			?? GetCornerMoves(board, mark)
-			?? GetSideMoves(board, mark)
-			?? throw new("no moves to take!");
-
-		return moves[MoveRNG.Next(moves.Count)];
-	}
+	public override List<int> GetMoves(Board board, Mark mark) =>
+		GetWinningMoves(board, mark)
+		?? GetBlockingMoves(board, mark)
+		?? GetTrappingMoves(board, mark)
+		?? GetCenterMove(board, mark)
+		?? GetCornerMoves(board, mark)
+		?? GetSideMoves(board, mark)
+		?? throw new("no moves to take!");
 }
