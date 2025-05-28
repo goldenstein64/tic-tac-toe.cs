@@ -1,6 +1,3 @@
-using System.Text;
-using TicTacToe.Util.EnumerableExtensions;
-
 namespace TicTacToe.Data;
 
 public class Board : IEnumerable<Mark?>
@@ -74,27 +71,4 @@ public class Board : IEnumerable<Mark?>
 		pos is >= 0 and < Size && Data[pos] == mark;
 
 	public bool CanMark(int pos) => IsMarkedWith(pos, null);
-
-	/// <summary>
-	/// creates a string representation of this board. This one uses ASCII.
-	/// </summary>
-	public override string ToString() =>
-		string.Concat(
-			Data.Select((mark, i) => (mark, i))
-				.Chunk(3)
-				.Select(
-					(row) =>
-						string.Concat(
-							row.Select( // convert each element to a string
-									(t) =>
-										t.mark is Mark mark ? mark.ToString() : (t.i + 1).ToString() // default to index + 1
-								)
-								.Intersperse(" | ") // vertical separators
-								.Prepend(" ") // padding on left side
-								.Append(" ") // padding on right side
-						)
-				)
-				.Intersperse("-----------") // horizontal separators
-				.Intersperse("\n") // put new lines between each element
-		);
 }
