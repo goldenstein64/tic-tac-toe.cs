@@ -42,13 +42,8 @@ public class Board : IEnumerable<Mark?>
 		}
 	}
 
-	public IEnumerator<Mark?> GetEnumerator()
-	{
-		foreach (var elem in Data)
-		{
-			yield return elem;
-		}
-	}
+	public IEnumerator<Mark?> GetEnumerator() =>
+		Data.AsEnumerable().GetEnumerator();
 
 	System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() =>
 		GetEnumerator();
