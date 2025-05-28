@@ -1,6 +1,6 @@
 using TicTacToe.Data;
 using TicTacToe.Player;
-using TicTacToe.Util.EnumerableExtensions;
+using static TicTacToe.Util.EnumerableExtensions;
 
 namespace TicTacToe.Tests.Player.HardComputerTests;
 
