@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace TicTacToe.App.Util;
 
 public static class EnumerableExtensions
