@@ -10,24 +10,18 @@ public class UsesApplication
 	public MockConnection Connection = new();
 	public Application Subject;
 
-	public UsesApplication()
-	{
-		Subject = new Application(Connection);
-	}
+	public UsesApplication() => Subject = new Application(Connection);
 
-	public void AssertPrints(Message message, int count)
-	{
+	public void AssertPrints(Message message, int count) =>
 		Assert.True(
 			Connection.Outputs.Where((msg) => msg == message).Count() >= count
 		);
-	}
 
-	public void AssertPrints(Message message) => AssertPrints(message, 1);
+	public void AssertPrints(Message message) =>
+		Assert.Contains(message, Connection.Outputs);
 
-	public void AssertDoesNotPrint(Message message)
-	{
+	public void AssertDoesNotPrint(Message message) =>
 		Assert.DoesNotContain(message, Connection.Outputs);
-	}
 }
 
 public class ChoosePlayerOnce : UsesApplication
