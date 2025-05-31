@@ -20,3 +20,13 @@ dotnet build --configuration=Release
 ```sh
 dotnet test
 ```
+
+## Publishing
+
+```sh
+# publish core
+dotnet publish Lib
+
+# publish console
+dotnet publish App
+```
