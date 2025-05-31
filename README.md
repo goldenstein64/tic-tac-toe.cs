@@ -1,6 +1,6 @@
 # tic-tac-toe.cs
 
-An implementation of a tic-tac-toe program in C#. See [goldenstein64/tic-tac-toe-spec](https://github.com/goldenstein64/tic-tac-toe-spec) for the design specification.
+An implementation of a tic-tac-toe program in C#. See [goldenstein64/tic-tac-toe.spec](https://github.com/goldenstein64/tic-tac-toe.spec) for the design specification.
 
 ## Usage
 
