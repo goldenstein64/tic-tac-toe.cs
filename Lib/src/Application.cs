@@ -5,7 +5,7 @@ using TicTacToe.Player;
 namespace TicTacToe;
 
 /// <summary>
-/// The main class responsible for running a game of tic-tac-toe.
+/// holds all logic required to run a game of tic-tac-toe
 /// </summary>
 public class Application(IConnection connection, Board? board = null)
 {
@@ -14,41 +14,29 @@ public class Application(IConnection connection, Board? board = null)
 
 	record EndedResult(Mark? Winner);
 
-	IPlayer? RespondNull(Message message)
-	{
-		Conn.Print(message);
-		return null;
-	}
-
-	IPlayer? ChooseComputerOnce(Mark mark)
+	IPlayer ChooseComputerOnce(Mark mark)
 	{
 		return Conn.Prompt(new MSG_PromptComputer(mark)) switch
 		{
 			"E" => new EasyComputer(),
 			"M" => new MediumComputer(),
 			"H" => new HardComputer(),
-			_ => RespondNull(new ERR_ComputerInvalid()),
+			_ => throw new MessageException(new ERR_ComputerInvalid()),
 		};
 	}
 
-	public IPlayer? ChoosePlayerOnce(Mark mark)
+	public IPlayer ChoosePlayerOnce(Mark mark)
 	{
 		return Conn.Prompt(new MSG_PromptPlayer(mark)) switch
 		{
 			"H" => new Human(Conn),
 			"C" => ChooseComputerOnce(mark),
-			_ => RespondNull(new ERR_PlayerInvalid()),
+			_ => throw new MessageException(new ERR_PlayerInvalid()),
 		};
 	}
 
-	public IPlayer ChoosePlayer(Mark mark)
-	{
-		IPlayer? player = null;
-		while (player is null)
-			player = ChoosePlayerOnce(mark);
-
-		return player;
-	}
+	public IPlayer ChoosePlayer(Mark mark) =>
+		MessageException.TryUntilOk(Conn, () => ChoosePlayerOnce(mark));
 
 	public IPlayer[] ChoosePlayers() =>
 		[ChoosePlayer(Mark.X), ChoosePlayer(Mark.O)];
@@ -70,7 +58,7 @@ public class Application(IConnection connection, Board? board = null)
 		Conn.Print(new MSG_Board(Board));
 		while (true)
 		{
-			var mark = currentIndex % 2 == 0 ? Mark.X : Mark.O;
+			var mark = currentIndex % 2 is 0 ? Mark.X : Mark.O;
 			var player = players[currentIndex];
 			var maybeResult = PlayTurn(player, mark);
 			Conn.Print(new MSG_Board(Board));

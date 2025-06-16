@@ -24,6 +24,26 @@ public sealed record ERR_NumberOutOfRange : Message;
 
 public sealed record ERR_SpaceOccupied : Message;
 
+public class MessageException(Message message) : Exception
+{
+	public new readonly Message Message = message;
+
+	public static T TryUntilOk<T>(IConnection conn, Func<T> body)
+	{
+		while (true)
+		{
+			try
+			{
+				return body();
+			}
+			catch (MessageException e)
+			{
+				conn.Print(e.Message);
+			}
+		}
+	}
+}
+
 public interface IConnection
 {
 	public string Prompt(Message message);

@@ -45,14 +45,12 @@ public class GetMoveOnce : UsesHuman
 		var board = new Board(",XO,,,,,,");
 		Connection.Inputs = new(["3"]);
 
-		var move = Subject.GetMoveOnce(board, Mark.X);
-
-		Assert.Equal(
-			[new MSG_PromptMove(Mark.X), new ERR_SpaceOccupied()],
-			Connection.Outputs
+		var e = Assert.Throws<MessageException>(
+			() => Subject.GetMoveOnce(board, Mark.X)
 		);
 
-		Assert.Null(move);
+		Assert.Equal(new ERR_SpaceOccupied(), e.Message);
+		Assert.Equal([new MSG_PromptMove(Mark.X)], Connection.Outputs);
 	}
 
 	[Fact]
@@ -61,14 +59,12 @@ public class GetMoveOnce : UsesHuman
 		var board = new Board(",,,,,,,,,");
 		Connection.Inputs = new(["0"]);
 
-		var move = Subject.GetMoveOnce(board, Mark.X);
-
-		Assert.Equal(
-			[new MSG_PromptMove(Mark.X), new ERR_NumberOutOfRange()],
-			Connection.Outputs
+		var e = Assert.Throws<MessageException>(
+			() => Subject.GetMoveOnce(board, Mark.X)
 		);
 
-		Assert.Null(move);
+		Assert.Equal(new ERR_NumberOutOfRange(), e.Message);
+		Assert.Equal([new MSG_PromptMove(Mark.X)], Connection.Outputs);
 	}
 
 	[Fact]
@@ -77,14 +73,12 @@ public class GetMoveOnce : UsesHuman
 		var board = new Board(",,,,,,,,,");
 		Connection.Inputs = new(["9999999999999999999999999999999"]);
 
-		var move = Subject.GetMoveOnce(board, Mark.X);
-
-		Assert.Equal(
-			[new MSG_PromptMove(Mark.X), new ERR_NotANumber()],
-			Connection.Outputs
+		var e = Assert.Throws<MessageException>(
+			() => Subject.GetMoveOnce(board, Mark.X)
 		);
 
-		Assert.Null(move);
+		Assert.Equal(new ERR_NotANumber(), e.Message);
+		Assert.Equal([new MSG_PromptMove(Mark.X)], Connection.Outputs);
 	}
 
 	[Fact]
@@ -93,13 +87,11 @@ public class GetMoveOnce : UsesHuman
 		var board = new Board(",,,,,,,,,");
 		Connection.Inputs = new(["@"]);
 
-		var move = Subject.GetMoveOnce(board, Mark.X);
-
-		Assert.Equal(
-			[new MSG_PromptMove(Mark.X), new ERR_NotANumber()],
-			Connection.Outputs
+		var e = Assert.Throws<MessageException>(
+			() => Subject.GetMoveOnce(board, Mark.X)
 		);
 
-		Assert.Null(move);
+		Assert.Equal(new ERR_NotANumber(), e.Message);
+		Assert.Equal([new MSG_PromptMove(Mark.X)], Connection.Outputs);
 	}
 }

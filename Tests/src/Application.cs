@@ -76,33 +76,31 @@ public class ChoosePlayerOnce : UsesApplication
 	}
 
 	[Fact]
-	public void ReturnsNullOnInvalidComputer()
+	public void ThrowsOnInvalidComputer()
 	{
 		Connection.Inputs = new(["C", "@"]);
-		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
 
+		var e = Assert.Throws<MessageException>(
+			() => Subject.ChoosePlayerOnce(Mark.X)
+		);
+
+		Assert.Equal(new ERR_ComputerInvalid(), e.Message);
 		Assert.Equal(
-			[
-				new MSG_PromptPlayer(Mark.X),
-				new MSG_PromptComputer(Mark.X),
-				new ERR_ComputerInvalid()
-			],
+			[new MSG_PromptPlayer(Mark.X), new MSG_PromptComputer(Mark.X),],
 			Connection.Outputs
 		);
-		Assert.Null(chosenPlayer);
 	}
 
 	[Fact]
 	public void ReturnsNullOnInvalidPlayer()
 	{
 		Connection.Inputs = new(["#"]);
-		var chosenPlayer = Subject.ChoosePlayerOnce(Mark.X);
-
-		Assert.Equal(
-			[new MSG_PromptPlayer(Mark.X), new ERR_PlayerInvalid()],
-			Connection.Outputs
+		var e = Assert.Throws<MessageException>(
+			() => Subject.ChoosePlayerOnce(Mark.X)
 		);
-		Assert.Null(chosenPlayer);
+
+		Assert.Equal(new ERR_PlayerInvalid(), e.Message);
+		Assert.Equal([new MSG_PromptPlayer(Mark.X)], Connection.Outputs);
 	}
 }
 
