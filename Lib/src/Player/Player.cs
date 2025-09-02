@@ -3,11 +3,12 @@ using TicTacToe.Data;
 namespace TicTacToe.Player;
 
 /// <summary>
-/// represents a player in a game of tic-tac-toe
+/// defines a player in a tic-tac-toe game
 /// </summary>
 public interface IPlayer
 {
 	/// <summary>
+	/// asks for a move to make
 	/// </summary>
 	///
 	/// <returns>
