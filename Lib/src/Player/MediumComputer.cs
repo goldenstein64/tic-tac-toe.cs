@@ -21,19 +21,15 @@ public class MediumComputer : Computer
 
 	static List<int>? GetWinningMoves(Board board, Mark mark)
 	{
-		var otherMark = mark.Other();
 		var result = new List<int>();
 		foreach (var pattern in Board.WinPatterns)
 		{
-			var boardPattern = pattern.Select((i) => board[i]);
-			if (boardPattern.Contains(otherMark))
-				continue;
-
 			int markCount = 0;
 			int? emptyIndex = null;
 
-			foreach (var (i, found) in pattern.Zip(boardPattern))
+			foreach (var i in pattern)
 			{
+				var found = board[i];
 				if (found == mark)
 					markCount += 1;
 				else if (found is null)
