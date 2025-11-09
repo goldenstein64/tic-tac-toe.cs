@@ -153,15 +153,15 @@ public class ChoosePlayers : UsesApplication
 
 		Assert.Equal(
 			[
-				new MSG_PromptPlayer(Mark.X),
+				new MSG_PromptPlayer(Mark.X), // "@"
 				new ERR_PlayerInvalid(),
-				new MSG_PromptPlayer(Mark.X),
-				new MSG_PromptComputer(Mark.X),
-				new MSG_PromptPlayer(Mark.O),
+				new MSG_PromptPlayer(Mark.X), // "C"
+				new MSG_PromptComputer(Mark.X), // "H"
+				new MSG_PromptPlayer(Mark.O), // "@"
 				new ERR_PlayerInvalid(),
-				new MSG_PromptPlayer(Mark.O),
+				new MSG_PromptPlayer(Mark.O), // "@"
 				new ERR_PlayerInvalid(),
-				new MSG_PromptPlayer(Mark.O),
+				new MSG_PromptPlayer(Mark.O), // "H"
 			],
 			Connection.Outputs
 		);
