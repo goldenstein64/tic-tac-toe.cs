@@ -71,14 +71,6 @@ public class HardComputer : Computer
 			_ => throw new(),
 		};
 
-	static bool SymmetryMatches(
-		HashSet<int> equalSet,
-		IEnumerable<int> symmetry
-	) => symmetry.All(equalSet.Contains);
-
-	static IEnumerable<int> FilterImage(Board board, IEnumerable<int> image) =>
-		image.Where(board.CanMark);
-
 	static HashSet<int> GetEqualitySet(Board board) =>
 		Equalities.IndexesWhere((eq) => board[eq.a] == board[eq.b]).ToHashSet();
 
@@ -86,13 +78,13 @@ public class HardComputer : Computer
 	{
 		var equalitySet = GetEqualitySet(board);
 		var maybeMatchedSymmetry = Symmetries.FirstOrNullStruct(
-			(sym) => SymmetryMatches(equalitySet, sym.Equalities)
+			(sym) => sym.Equalities.All(equalitySet.Contains)
 		);
 
 		if (maybeMatchedSymmetry is not Symmetry matchedSymmetry)
 			return null;
 
-		return FilterImage(board, matchedSymmetry.Image);
+		return matchedSymmetry.Image.Where(board.CanMark);
 	}
 
 	static IEnumerable<int> SimpleActions(Board board) =>
