@@ -23,10 +23,7 @@ IConnection connection = new ConsoleConnection(
 							(row) =>
 								string.Concat(
 									row.Select( // convert each element to a string
-											(t) =>
-												t.mark is Mark mark
-													? mark.ToString()
-													: (t.i + 1).ToString() // default to index + 1
+											(t) => t.mark?.ToString() ?? (t.i + 1).ToString()
 										)
 										.Intersperse(" | ") // vertical separators
 										.Prepend(" ") // padding on left side
