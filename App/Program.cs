@@ -11,7 +11,7 @@ IConnection connection = new ConsoleConnection(
 			MSG_PromptPlayer(var mark)
 				=> $"Is Player {mark} a player or computer? [H/C]: ",
 			MSG_PromptComputer(var mark)
-				=> $"What is computer {mark}'s difficulty? [E/M/H]: ",
+				=> $"What is Computer {mark}'s difficulty? [E/M/H]: ",
 			MSG_PlayerWon(var mark) => $"Player {mark} won!",
 			MSG_Tied => "There was a tie!",
 			MSG_Board(var board)
