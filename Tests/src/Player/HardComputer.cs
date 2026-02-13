@@ -1,8 +1,8 @@
-using TicTacToe.Data;
-using TicTacToe.Player;
-using static TicTacToe.Util.EnumerableExtensions;
+using Goldenstein64.TicTacToe.Data;
+using Goldenstein64.TicTacToe.Player;
+using static Goldenstein64.TicTacToe.Util.EnumerableExtensions;
 
-namespace TicTacToe.Tests.Player.HardComputerTests;
+namespace Goldenstein64.TicTacToe.Tests.Player.HardComputerTests;
 
 public class UsesHardComputer
 {

@@ -1,6 +1,6 @@
-using TicTacToe.Data;
+using Goldenstein64.TicTacToe.Data;
 
-namespace TicTacToe.Tests.Data.BoardTests;
+namespace Goldenstein64.TicTacToe.Tests.Data.BoardTests;
 
 public class Won
 {

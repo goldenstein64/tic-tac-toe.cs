@@ -1,8 +1,8 @@
-using TicTacToe;
-using TicTacToe.App;
-using TicTacToe.Data;
-using TicTacToe.Data.Messages;
-using static TicTacToe.App.Util.EnumerableExtensions;
+using Goldenstein64.TicTacToe;
+using Goldenstein64.TicTacToe.App;
+using Goldenstein64.TicTacToe.Data;
+using Goldenstein64.TicTacToe.Data.Messages;
+using static Goldenstein64.TicTacToe.App.Util.EnumerableExtensions;
 
 IConnection connection = new ConsoleConnection(
 	(msg) =>

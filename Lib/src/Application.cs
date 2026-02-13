@@ -1,8 +1,8 @@
-﻿using TicTacToe.Data;
-using TicTacToe.Data.Messages;
-using TicTacToe.Player;
+﻿using Goldenstein64.TicTacToe.Data;
+using Goldenstein64.TicTacToe.Data.Messages;
+using Goldenstein64.TicTacToe.Player;
 
-namespace TicTacToe;
+namespace Goldenstein64.TicTacToe;
 
 /// <summary>
 /// holds all logic required to run a game of tic-tac-toe

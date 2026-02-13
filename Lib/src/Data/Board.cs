@@ -1,4 +1,4 @@
-namespace TicTacToe.Data;
+namespace Goldenstein64.TicTacToe.Data;
 
 public class Board : IEnumerable<Mark?>
 {

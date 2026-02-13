@@ -1,7 +1,7 @@
-using TicTacToe.Data;
-using TicTacToe.Data.Messages;
+using Goldenstein64.TicTacToe.Data;
+using Goldenstein64.TicTacToe.Data.Messages;
 
-namespace TicTacToe.Player;
+namespace Goldenstein64.TicTacToe.Player;
 
 /// <summary>
 /// a Player that prompts the user for input

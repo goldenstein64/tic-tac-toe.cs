@@ -1,4 +1,4 @@
-namespace TicTacToe.Util;
+namespace Goldenstein64.TicTacToe.Util;
 
 public static class EnumerableExtensions
 {

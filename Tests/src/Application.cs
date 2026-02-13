@@ -1,9 +1,9 @@
-using TicTacToe.Data;
-using TicTacToe.Data.Messages;
-using TicTacToe.Player;
-using TicTacToe.Tests.Util;
+using Goldenstein64.TicTacToe.Data;
+using Goldenstein64.TicTacToe.Data.Messages;
+using Goldenstein64.TicTacToe.Player;
+using Goldenstein64.TicTacToe.Tests.Util;
 
-namespace TicTacToe.Tests.ApplicationTests;
+namespace Goldenstein64.TicTacToe.Tests.ApplicationTests;
 
 public class UsesApplication
 {
