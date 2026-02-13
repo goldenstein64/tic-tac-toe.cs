@@ -1,6 +1,6 @@
-using TicTacToe.Data.Messages;
+using Goldenstein64.TicTacToe.Data.Messages;
 
-namespace TicTacToe.Tests.Util;
+namespace Goldenstein64.TicTacToe.Tests.Util;
 
 public class MockConnection : IConnection
 {

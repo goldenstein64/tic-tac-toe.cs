@@ -1,4 +1,4 @@
-namespace TicTacToe.Data.Messages;
+namespace Goldenstein64.TicTacToe.Data.Messages;
 
 public abstract record Message;
 

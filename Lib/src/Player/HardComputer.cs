@@ -1,7 +1,7 @@
-using TicTacToe.Data;
-using static TicTacToe.Util.EnumerableExtensions;
+using Goldenstein64.TicTacToe.Data;
+using static Goldenstein64.TicTacToe.Util.EnumerableExtensions;
 
-namespace TicTacToe.Player;
+namespace Goldenstein64.TicTacToe.Player;
 
 public class HardComputer : Computer
 {

@@ -1,6 +1,6 @@
-using TicTacToe.Data.Messages;
+using Goldenstein64.TicTacToe.Data.Messages;
 
-namespace TicTacToe.App;
+namespace Goldenstein64.TicTacToe.App;
 
 public class ConsoleConnection(Func<Message, string> formatFunc) : IConnection
 {

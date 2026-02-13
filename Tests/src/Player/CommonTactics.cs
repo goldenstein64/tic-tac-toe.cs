@@ -1,7 +1,7 @@
-using TicTacToe.Data;
-using TicTacToe.Player;
+using Goldenstein64.TicTacToe.Data;
+using Goldenstein64.TicTacToe.Player;
 
-namespace TicTacToe.Tests.Player.CommonTacticsTests;
+namespace Goldenstein64.TicTacToe.Tests.Player.CommonTacticsTests;
 
 public class CommonTactics
 {

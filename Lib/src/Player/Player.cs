@@ -1,6 +1,6 @@
-using TicTacToe.Data;
+using Goldenstein64.TicTacToe.Data;
 
-namespace TicTacToe.Player;
+namespace Goldenstein64.TicTacToe.Player;
 
 /// <summary>
 /// defines a player in a tic-tac-toe game
