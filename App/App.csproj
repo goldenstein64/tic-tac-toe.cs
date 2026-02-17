@@ -3,7 +3,7 @@
   <PropertyGroup Label="Project Settings">
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Goldenstein64</RootNamespace>
+    <RootNamespace>Goldenstein64.TicTacToe.App</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
