@@ -7,7 +7,7 @@ public static class EnumerableExtensions
 	///
 	/// <para>
 	/// This does not place the value at the front or back of the sequence. Use
-	/// <c>.Prepend</c> and <c>.Append</c> respectively to do this.
+	/// <see cref="Enumerable.Prepend{T}" /> and <see cref="Enumerable.Append{T}" /> respectively to do this.
 	/// </para>
 	/// </summary>
 	public static IEnumerable<T> Intersperse<T>(
