@@ -27,7 +27,7 @@ public class Board : IEnumerable<Mark?>
 		Data = data.Take(Size).ToArray();
 	}
 
-	public Mark? this[int index]
+	public virtual Mark? this[int index]
 	{
 		get => Data[index];
 		set
@@ -60,7 +60,7 @@ public class Board : IEnumerable<Mark?>
 	public bool PatternWon(Mark mark, int[] pattern) =>
 		pattern.All(pos => Data[pos] == mark);
 
-	public bool Won(Mark mark) =>
+	public virtual bool Won(Mark mark) =>
 		WinPatterns.Any(pattern => PatternWon(mark, pattern));
 
 	public bool Full() => Data.All(mark => mark is not null);
